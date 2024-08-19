@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from bson import ObjectId
 from n_funs.n_func import apply_n_func
+from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # Replace with your actual MongoDB connection string
 DATABASE_URI = "mongodb+srv://SSN:LO4uCW9mK8OpBQAp@atlascluster.bnamshy.mongodb.net/Bijlex?retryWrites=true&w=majority"
@@ -20,11 +22,14 @@ def serialize_doc(doc):
 @app.route('/entries', methods=['POST'])
 def create_entry():
     data = request.json
-    if 'id' not in data or 'answer' not in data or 'nLevel' not in data or 'inputString' not in data:
+    if 'id' not in data or 'answer' not in data or 'inputString' not in data:
         return jsonify({"error": "Missing required fields"}), 400
 
-    # Call apply_n_func from n_funcs
-    nAnswers = apply_n_func(data['nLevel'], data['inputString'])
+    # Determine the maximum nLevel by the number of n_funcs available
+    max_nLevel = 4  # Assuming N1, N2, N3, and N4 are available
+
+    # Call apply_n_func with the maximum nLevel
+    nAnswers = apply_n_func(max_nLevel, data['inputString'])
 
     entry = {
         "id": data['id'],
@@ -73,26 +78,35 @@ def delete_entry(id):
         return jsonify({"message": "Entry deleted"}), 200
     else:
         return jsonify({"error": "Entry not found"}), 404
-
+    
 @app.route('/checkUserAnswer', methods=['POST'])
 def check_user_answer():
     data = request.json
-    if 'userAnswer' not in data or 'expectedN' not in data or 'inputString' not in data:
+    if 'id' not in data or 'userAnswer' not in data or 'expectedN' not in data:
         return jsonify({"error": "Missing required fields"}), 400
 
+    entry_id = data['id']
     user_answer = data['userAnswer']
     expected_n = data['expectedN']
-    input_string = data['inputString']
 
-    # Generate nAnswers using apply_n_func
-    generated_answers = apply_n_func(expected_n, input_string)
+    # Find the entry by ID in the database
+    entry = collection.find_one({"id": entry_id})
+    if not entry:
+        return jsonify({"error": "Entry not found"}), 404
+
+    # Get the stored nAnswers from the entry
+    stored_nAnswers = entry.get('nAnswers', {})
+
+    # Generate nAnswers using apply_n_func based on the user's input
+    generated_answers = apply_n_func(expected_n, user_answer)
 
     # Initialize the result dictionary
     result = {"answer": "correct"}
 
+    # Compare each level's answer
     for i in range(1, expected_n + 1):
         key = f'N{i}'
-        if generated_answers[key] == user_answer:
+        if stored_nAnswers.get(key) == generated_answers.get(key):
             result[key] = "correct"
         else:
             result[key] = "incorrect"
