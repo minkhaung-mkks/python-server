@@ -5,7 +5,16 @@ from n_funs.n_func import apply_n_func
 from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+allowed_origins = [
+    "http://localhost:5174",
+    "http://localhost:5173",
+    "https://yourfirstdomain.com",
+    "https://yourseconddomain.com",
+    "https://yourthirddomain.com"
+]
+
+# Enable CORS for the specified origins
+CORS(app, origins=allowed_origins)
 
 # Replace with your actual MongoDB connection string
 DATABASE_URI = "mongodb+srv://SSN:LO4uCW9mK8OpBQAp@atlascluster.bnamshy.mongodb.net/Bijlex?retryWrites=true&w=majority"
