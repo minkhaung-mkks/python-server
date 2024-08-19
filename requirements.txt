@@ -1,5 +1,5 @@
-Flask==2.1.1
-pymongo==4.0.1
-flask-cors==3.0.10
-ply==3.11
+Flask==3.0.3
+Flask-Cors==4.0.1
 gunicorn==23.0.0
+ply==3.11
+pymongo==4.8.0
