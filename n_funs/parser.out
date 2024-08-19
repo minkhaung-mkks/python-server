@@ -1,0 +1,1664 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> final
+Rule 1     final -> answers
+Rule 2     final -> expr
+Rule 3     answers -> answer VEE answers
+Rule 4     answers -> answer
+Rule 5     answer -> sym EQUALS expr
+Rule 6     expr -> term
+Rule 7     expr -> sum
+Rule 8     term -> factor
+Rule 9     term -> prod
+Rule 10    factor -> atom
+Rule 11    factor -> minop
+Rule 12    minop -> MINUS atom
+Rule 13    minop -> MINUS minop
+Rule 14    atom -> num
+Rule 15    atom -> sym
+Rule 16    atom -> LPAREN expr RPAREN
+Rule 17    atom -> fraction
+Rule 18    atom -> sqrt
+Rule 19    atom -> expo
+Rule 20    atom -> factorial
+Rule 21    expo -> atom HAT LBRACKET expr RBRACKET
+Rule 22    expo -> atom HAT atom
+Rule 23    num -> INTEGER
+Rule 24    num -> FLOAT
+Rule 25    sym -> SYMBOL
+Rule 26    sum -> term PLUS term
+Rule 27    sum -> term MINUS term
+Rule 28    sum -> term PLUS sum
+Rule 29    sum -> term MINUS sum
+Rule 30    prod -> negprod
+Rule 31    prod -> posprod
+Rule 32    negprod -> MINUS posprod
+Rule 33    posprod -> atom TIMES factor
+Rule 34    posprod -> atom atom
+Rule 35    posprod -> atom TIMES prod
+Rule 36    posprod -> atom posprod
+Rule 37    fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+Rule 38    sqrt -> SQRT LBRACKET expr RBRACKET
+Rule 39    factorial -> atom FACT
+
+Terminals, with rules where they appear
+
+EQUALS               : 5
+FACT                 : 39
+FLOAT                : 24
+FRAC                 : 37
+HAT                  : 21 22
+INTEGER              : 23
+LBRACKET             : 21 37 37 38
+LPAREN               : 16
+MINUS                : 12 13 27 29 32
+PLUS                 : 26 28
+RBRACKET             : 21 37 37 38
+RPAREN               : 16
+SQRT                 : 38
+SYMBOL               : 25
+TIMES                : 33 35
+VEE                  : 3
+error                : 
+
+Nonterminals, with rules where they appear
+
+answer               : 3 4
+answers              : 1 3
+atom                 : 10 12 21 22 22 33 34 34 35 36 39
+expo                 : 19
+expr                 : 2 5 16 21 37 37 38
+factor               : 8 33
+factorial            : 20
+final                : 0
+fraction             : 17
+minop                : 11 13
+negprod              : 30
+num                  : 14
+posprod              : 31 32 36
+prod                 : 9 35
+sqrt                 : 18
+sum                  : 7 28 29
+sym                  : 5 15
+term                 : 6 26 26 27 27 28 29
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . final
+    (1) final -> . answers
+    (2) final -> . expr
+    (3) answers -> . answer VEE answers
+    (4) answers -> . answer
+    (6) expr -> . term
+    (7) expr -> . sum
+    (5) answer -> . sym EQUALS expr
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (25) sym -> . SYMBOL
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    SYMBOL          shift and go to state 11
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    final                          shift and go to state 1
+    answers                        shift and go to state 2
+    expr                           shift and go to state 3
+    answer                         shift and go to state 4
+    term                           shift and go to state 5
+    sum                            shift and go to state 6
+    sym                            shift and go to state 7
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    atom                           shift and go to state 12
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 1
+
+    (0) S' -> final .
+
+
+
+state 2
+
+    (1) final -> answers .
+
+    $end            reduce using rule 1 (final -> answers .)
+
+
+state 3
+
+    (2) final -> expr .
+
+    $end            reduce using rule 2 (final -> expr .)
+
+
+state 4
+
+    (3) answers -> answer . VEE answers
+    (4) answers -> answer .
+
+    VEE             shift and go to state 26
+    $end            reduce using rule 4 (answers -> answer .)
+
+
+state 5
+
+    (6) expr -> term .
+    (26) sum -> term . PLUS term
+    (27) sum -> term . MINUS term
+    (28) sum -> term . PLUS sum
+    (29) sum -> term . MINUS sum
+
+    $end            reduce using rule 6 (expr -> term .)
+    RPAREN          reduce using rule 6 (expr -> term .)
+    VEE             reduce using rule 6 (expr -> term .)
+    RBRACKET        reduce using rule 6 (expr -> term .)
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+
+
+state 6
+
+    (7) expr -> sum .
+
+    $end            reduce using rule 7 (expr -> sum .)
+    RPAREN          reduce using rule 7 (expr -> sum .)
+    VEE             reduce using rule 7 (expr -> sum .)
+    RBRACKET        reduce using rule 7 (expr -> sum .)
+
+
+state 7
+
+    (5) answer -> sym . EQUALS expr
+    (15) atom -> sym .
+
+    EQUALS          shift and go to state 29
+    TIMES           reduce using rule 15 (atom -> sym .)
+    HAT             reduce using rule 15 (atom -> sym .)
+    FACT            reduce using rule 15 (atom -> sym .)
+    LPAREN          reduce using rule 15 (atom -> sym .)
+    INTEGER         reduce using rule 15 (atom -> sym .)
+    FLOAT           reduce using rule 15 (atom -> sym .)
+    SYMBOL          reduce using rule 15 (atom -> sym .)
+    FRAC            reduce using rule 15 (atom -> sym .)
+    SQRT            reduce using rule 15 (atom -> sym .)
+    PLUS            reduce using rule 15 (atom -> sym .)
+    MINUS           reduce using rule 15 (atom -> sym .)
+    $end            reduce using rule 15 (atom -> sym .)
+
+
+state 8
+
+    (8) term -> factor .
+
+    PLUS            reduce using rule 8 (term -> factor .)
+    MINUS           reduce using rule 8 (term -> factor .)
+    $end            reduce using rule 8 (term -> factor .)
+    RPAREN          reduce using rule 8 (term -> factor .)
+    VEE             reduce using rule 8 (term -> factor .)
+    RBRACKET        reduce using rule 8 (term -> factor .)
+
+
+state 9
+
+    (9) term -> prod .
+
+    PLUS            reduce using rule 9 (term -> prod .)
+    MINUS           reduce using rule 9 (term -> prod .)
+    $end            reduce using rule 9 (term -> prod .)
+    RPAREN          reduce using rule 9 (term -> prod .)
+    VEE             reduce using rule 9 (term -> prod .)
+    RBRACKET        reduce using rule 9 (term -> prod .)
+
+
+state 10
+
+    (12) minop -> MINUS . atom
+    (13) minop -> MINUS . minop
+    (32) negprod -> MINUS . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 30
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    atom                           shift and go to state 31
+    minop                          shift and go to state 32
+    posprod                        shift and go to state 33
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 11
+
+    (25) sym -> SYMBOL .
+
+    EQUALS          reduce using rule 25 (sym -> SYMBOL .)
+    TIMES           reduce using rule 25 (sym -> SYMBOL .)
+    HAT             reduce using rule 25 (sym -> SYMBOL .)
+    FACT            reduce using rule 25 (sym -> SYMBOL .)
+    LPAREN          reduce using rule 25 (sym -> SYMBOL .)
+    INTEGER         reduce using rule 25 (sym -> SYMBOL .)
+    FLOAT           reduce using rule 25 (sym -> SYMBOL .)
+    SYMBOL          reduce using rule 25 (sym -> SYMBOL .)
+    FRAC            reduce using rule 25 (sym -> SYMBOL .)
+    SQRT            reduce using rule 25 (sym -> SYMBOL .)
+    PLUS            reduce using rule 25 (sym -> SYMBOL .)
+    MINUS           reduce using rule 25 (sym -> SYMBOL .)
+    $end            reduce using rule 25 (sym -> SYMBOL .)
+    RPAREN          reduce using rule 25 (sym -> SYMBOL .)
+    VEE             reduce using rule 25 (sym -> SYMBOL .)
+    RBRACKET        reduce using rule 25 (sym -> SYMBOL .)
+
+
+state 12
+
+    (10) factor -> atom .
+    (33) posprod -> atom . TIMES factor
+    (34) posprod -> atom . atom
+    (35) posprod -> atom . TIMES prod
+    (36) posprod -> atom . posprod
+    (21) expo -> atom . HAT LBRACKET expr RBRACKET
+    (22) expo -> atom . HAT atom
+    (39) factorial -> atom . FACT
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    PLUS            reduce using rule 10 (factor -> atom .)
+    MINUS           reduce using rule 10 (factor -> atom .)
+    $end            reduce using rule 10 (factor -> atom .)
+    RPAREN          reduce using rule 10 (factor -> atom .)
+    VEE             reduce using rule 10 (factor -> atom .)
+    RBRACKET        reduce using rule 10 (factor -> atom .)
+    TIMES           shift and go to state 36
+    HAT             shift and go to state 38
+    FACT            shift and go to state 39
+    LPAREN          shift and go to state 17
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    atom                           shift and go to state 35
+    posprod                        shift and go to state 37
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 13
+
+    (11) factor -> minop .
+
+    PLUS            reduce using rule 11 (factor -> minop .)
+    MINUS           reduce using rule 11 (factor -> minop .)
+    $end            reduce using rule 11 (factor -> minop .)
+    RPAREN          reduce using rule 11 (factor -> minop .)
+    VEE             reduce using rule 11 (factor -> minop .)
+    RBRACKET        reduce using rule 11 (factor -> minop .)
+
+
+state 14
+
+    (30) prod -> negprod .
+
+    PLUS            reduce using rule 30 (prod -> negprod .)
+    MINUS           reduce using rule 30 (prod -> negprod .)
+    $end            reduce using rule 30 (prod -> negprod .)
+    RPAREN          reduce using rule 30 (prod -> negprod .)
+    VEE             reduce using rule 30 (prod -> negprod .)
+    RBRACKET        reduce using rule 30 (prod -> negprod .)
+
+
+state 15
+
+    (31) prod -> posprod .
+
+    PLUS            reduce using rule 31 (prod -> posprod .)
+    MINUS           reduce using rule 31 (prod -> posprod .)
+    $end            reduce using rule 31 (prod -> posprod .)
+    RPAREN          reduce using rule 31 (prod -> posprod .)
+    VEE             reduce using rule 31 (prod -> posprod .)
+    RBRACKET        reduce using rule 31 (prod -> posprod .)
+
+
+state 16
+
+    (14) atom -> num .
+
+    TIMES           reduce using rule 14 (atom -> num .)
+    HAT             reduce using rule 14 (atom -> num .)
+    FACT            reduce using rule 14 (atom -> num .)
+    LPAREN          reduce using rule 14 (atom -> num .)
+    INTEGER         reduce using rule 14 (atom -> num .)
+    FLOAT           reduce using rule 14 (atom -> num .)
+    SYMBOL          reduce using rule 14 (atom -> num .)
+    FRAC            reduce using rule 14 (atom -> num .)
+    SQRT            reduce using rule 14 (atom -> num .)
+    PLUS            reduce using rule 14 (atom -> num .)
+    MINUS           reduce using rule 14 (atom -> num .)
+    $end            reduce using rule 14 (atom -> num .)
+    RPAREN          reduce using rule 14 (atom -> num .)
+    VEE             reduce using rule 14 (atom -> num .)
+    RBRACKET        reduce using rule 14 (atom -> num .)
+
+
+state 17
+
+    (16) atom -> LPAREN . expr RPAREN
+    (6) expr -> . term
+    (7) expr -> . sum
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    expr                           shift and go to state 40
+    term                           shift and go to state 5
+    sum                            shift and go to state 6
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    atom                           shift and go to state 12
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 18
+
+    (17) atom -> fraction .
+
+    TIMES           reduce using rule 17 (atom -> fraction .)
+    HAT             reduce using rule 17 (atom -> fraction .)
+    FACT            reduce using rule 17 (atom -> fraction .)
+    LPAREN          reduce using rule 17 (atom -> fraction .)
+    INTEGER         reduce using rule 17 (atom -> fraction .)
+    FLOAT           reduce using rule 17 (atom -> fraction .)
+    SYMBOL          reduce using rule 17 (atom -> fraction .)
+    FRAC            reduce using rule 17 (atom -> fraction .)
+    SQRT            reduce using rule 17 (atom -> fraction .)
+    PLUS            reduce using rule 17 (atom -> fraction .)
+    MINUS           reduce using rule 17 (atom -> fraction .)
+    $end            reduce using rule 17 (atom -> fraction .)
+    RPAREN          reduce using rule 17 (atom -> fraction .)
+    VEE             reduce using rule 17 (atom -> fraction .)
+    RBRACKET        reduce using rule 17 (atom -> fraction .)
+
+
+state 19
+
+    (18) atom -> sqrt .
+
+    TIMES           reduce using rule 18 (atom -> sqrt .)
+    HAT             reduce using rule 18 (atom -> sqrt .)
+    FACT            reduce using rule 18 (atom -> sqrt .)
+    LPAREN          reduce using rule 18 (atom -> sqrt .)
+    INTEGER         reduce using rule 18 (atom -> sqrt .)
+    FLOAT           reduce using rule 18 (atom -> sqrt .)
+    SYMBOL          reduce using rule 18 (atom -> sqrt .)
+    FRAC            reduce using rule 18 (atom -> sqrt .)
+    SQRT            reduce using rule 18 (atom -> sqrt .)
+    PLUS            reduce using rule 18 (atom -> sqrt .)
+    MINUS           reduce using rule 18 (atom -> sqrt .)
+    $end            reduce using rule 18 (atom -> sqrt .)
+    RPAREN          reduce using rule 18 (atom -> sqrt .)
+    VEE             reduce using rule 18 (atom -> sqrt .)
+    RBRACKET        reduce using rule 18 (atom -> sqrt .)
+
+
+state 20
+
+    (19) atom -> expo .
+
+    TIMES           reduce using rule 19 (atom -> expo .)
+    HAT             reduce using rule 19 (atom -> expo .)
+    FACT            reduce using rule 19 (atom -> expo .)
+    LPAREN          reduce using rule 19 (atom -> expo .)
+    INTEGER         reduce using rule 19 (atom -> expo .)
+    FLOAT           reduce using rule 19 (atom -> expo .)
+    SYMBOL          reduce using rule 19 (atom -> expo .)
+    FRAC            reduce using rule 19 (atom -> expo .)
+    SQRT            reduce using rule 19 (atom -> expo .)
+    PLUS            reduce using rule 19 (atom -> expo .)
+    MINUS           reduce using rule 19 (atom -> expo .)
+    $end            reduce using rule 19 (atom -> expo .)
+    RPAREN          reduce using rule 19 (atom -> expo .)
+    VEE             reduce using rule 19 (atom -> expo .)
+    RBRACKET        reduce using rule 19 (atom -> expo .)
+
+
+state 21
+
+    (20) atom -> factorial .
+
+    TIMES           reduce using rule 20 (atom -> factorial .)
+    HAT             reduce using rule 20 (atom -> factorial .)
+    FACT            reduce using rule 20 (atom -> factorial .)
+    LPAREN          reduce using rule 20 (atom -> factorial .)
+    INTEGER         reduce using rule 20 (atom -> factorial .)
+    FLOAT           reduce using rule 20 (atom -> factorial .)
+    SYMBOL          reduce using rule 20 (atom -> factorial .)
+    FRAC            reduce using rule 20 (atom -> factorial .)
+    SQRT            reduce using rule 20 (atom -> factorial .)
+    PLUS            reduce using rule 20 (atom -> factorial .)
+    MINUS           reduce using rule 20 (atom -> factorial .)
+    $end            reduce using rule 20 (atom -> factorial .)
+    RPAREN          reduce using rule 20 (atom -> factorial .)
+    VEE             reduce using rule 20 (atom -> factorial .)
+    RBRACKET        reduce using rule 20 (atom -> factorial .)
+
+
+state 22
+
+    (23) num -> INTEGER .
+
+    TIMES           reduce using rule 23 (num -> INTEGER .)
+    HAT             reduce using rule 23 (num -> INTEGER .)
+    FACT            reduce using rule 23 (num -> INTEGER .)
+    LPAREN          reduce using rule 23 (num -> INTEGER .)
+    INTEGER         reduce using rule 23 (num -> INTEGER .)
+    FLOAT           reduce using rule 23 (num -> INTEGER .)
+    SYMBOL          reduce using rule 23 (num -> INTEGER .)
+    FRAC            reduce using rule 23 (num -> INTEGER .)
+    SQRT            reduce using rule 23 (num -> INTEGER .)
+    PLUS            reduce using rule 23 (num -> INTEGER .)
+    MINUS           reduce using rule 23 (num -> INTEGER .)
+    $end            reduce using rule 23 (num -> INTEGER .)
+    RPAREN          reduce using rule 23 (num -> INTEGER .)
+    VEE             reduce using rule 23 (num -> INTEGER .)
+    RBRACKET        reduce using rule 23 (num -> INTEGER .)
+
+
+state 23
+
+    (24) num -> FLOAT .
+
+    TIMES           reduce using rule 24 (num -> FLOAT .)
+    HAT             reduce using rule 24 (num -> FLOAT .)
+    FACT            reduce using rule 24 (num -> FLOAT .)
+    LPAREN          reduce using rule 24 (num -> FLOAT .)
+    INTEGER         reduce using rule 24 (num -> FLOAT .)
+    FLOAT           reduce using rule 24 (num -> FLOAT .)
+    SYMBOL          reduce using rule 24 (num -> FLOAT .)
+    FRAC            reduce using rule 24 (num -> FLOAT .)
+    SQRT            reduce using rule 24 (num -> FLOAT .)
+    PLUS            reduce using rule 24 (num -> FLOAT .)
+    MINUS           reduce using rule 24 (num -> FLOAT .)
+    $end            reduce using rule 24 (num -> FLOAT .)
+    RPAREN          reduce using rule 24 (num -> FLOAT .)
+    VEE             reduce using rule 24 (num -> FLOAT .)
+    RBRACKET        reduce using rule 24 (num -> FLOAT .)
+
+
+state 24
+
+    (37) fraction -> FRAC . LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+
+    LBRACKET        shift and go to state 41
+
+
+state 25
+
+    (38) sqrt -> SQRT . LBRACKET expr RBRACKET
+
+    LBRACKET        shift and go to state 42
+
+
+state 26
+
+    (3) answers -> answer VEE . answers
+    (3) answers -> . answer VEE answers
+    (4) answers -> . answer
+    (5) answer -> . sym EQUALS expr
+    (25) sym -> . SYMBOL
+
+    SYMBOL          shift and go to state 11
+
+    answer                         shift and go to state 4
+    answers                        shift and go to state 43
+    sym                            shift and go to state 44
+
+state 27
+
+    (26) sum -> term PLUS . term
+    (28) sum -> term PLUS . sum
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    term                           shift and go to state 45
+    sum                            shift and go to state 46
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    atom                           shift and go to state 12
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 28
+
+    (27) sum -> term MINUS . term
+    (29) sum -> term MINUS . sum
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    term                           shift and go to state 47
+    sum                            shift and go to state 48
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    atom                           shift and go to state 12
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 29
+
+    (5) answer -> sym EQUALS . expr
+    (6) expr -> . term
+    (7) expr -> . sum
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    sym                            shift and go to state 34
+    expr                           shift and go to state 49
+    term                           shift and go to state 5
+    sum                            shift and go to state 6
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    atom                           shift and go to state 12
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 30
+
+    (12) minop -> MINUS . atom
+    (13) minop -> MINUS . minop
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 30
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    atom                           shift and go to state 50
+    minop                          shift and go to state 32
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 31
+
+    (12) minop -> MINUS atom .
+    (33) posprod -> atom . TIMES factor
+    (34) posprod -> atom . atom
+    (35) posprod -> atom . TIMES prod
+    (36) posprod -> atom . posprod
+    (21) expo -> atom . HAT LBRACKET expr RBRACKET
+    (22) expo -> atom . HAT atom
+    (39) factorial -> atom . FACT
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    PLUS            reduce using rule 12 (minop -> MINUS atom .)
+    MINUS           reduce using rule 12 (minop -> MINUS atom .)
+    $end            reduce using rule 12 (minop -> MINUS atom .)
+    RPAREN          reduce using rule 12 (minop -> MINUS atom .)
+    VEE             reduce using rule 12 (minop -> MINUS atom .)
+    RBRACKET        reduce using rule 12 (minop -> MINUS atom .)
+    TIMES           shift and go to state 36
+    HAT             shift and go to state 38
+    FACT            shift and go to state 39
+    LPAREN          shift and go to state 17
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    atom                           shift and go to state 35
+    posprod                        shift and go to state 37
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 32
+
+    (13) minop -> MINUS minop .
+
+    PLUS            reduce using rule 13 (minop -> MINUS minop .)
+    MINUS           reduce using rule 13 (minop -> MINUS minop .)
+    $end            reduce using rule 13 (minop -> MINUS minop .)
+    RPAREN          reduce using rule 13 (minop -> MINUS minop .)
+    VEE             reduce using rule 13 (minop -> MINUS minop .)
+    RBRACKET        reduce using rule 13 (minop -> MINUS minop .)
+
+
+state 33
+
+    (32) negprod -> MINUS posprod .
+
+    PLUS            reduce using rule 32 (negprod -> MINUS posprod .)
+    MINUS           reduce using rule 32 (negprod -> MINUS posprod .)
+    $end            reduce using rule 32 (negprod -> MINUS posprod .)
+    RPAREN          reduce using rule 32 (negprod -> MINUS posprod .)
+    VEE             reduce using rule 32 (negprod -> MINUS posprod .)
+    RBRACKET        reduce using rule 32 (negprod -> MINUS posprod .)
+
+
+state 34
+
+    (15) atom -> sym .
+
+    TIMES           reduce using rule 15 (atom -> sym .)
+    HAT             reduce using rule 15 (atom -> sym .)
+    FACT            reduce using rule 15 (atom -> sym .)
+    LPAREN          reduce using rule 15 (atom -> sym .)
+    INTEGER         reduce using rule 15 (atom -> sym .)
+    FLOAT           reduce using rule 15 (atom -> sym .)
+    SYMBOL          reduce using rule 15 (atom -> sym .)
+    FRAC            reduce using rule 15 (atom -> sym .)
+    SQRT            reduce using rule 15 (atom -> sym .)
+    PLUS            reduce using rule 15 (atom -> sym .)
+    MINUS           reduce using rule 15 (atom -> sym .)
+    $end            reduce using rule 15 (atom -> sym .)
+    RPAREN          reduce using rule 15 (atom -> sym .)
+    VEE             reduce using rule 15 (atom -> sym .)
+    RBRACKET        reduce using rule 15 (atom -> sym .)
+
+
+state 35
+
+    (34) posprod -> atom atom .
+    (33) posprod -> atom . TIMES factor
+    (34) posprod -> atom . atom
+    (35) posprod -> atom . TIMES prod
+    (36) posprod -> atom . posprod
+    (21) expo -> atom . HAT LBRACKET expr RBRACKET
+    (22) expo -> atom . HAT atom
+    (39) factorial -> atom . FACT
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    PLUS            reduce using rule 34 (posprod -> atom atom .)
+    MINUS           reduce using rule 34 (posprod -> atom atom .)
+    $end            reduce using rule 34 (posprod -> atom atom .)
+    RPAREN          reduce using rule 34 (posprod -> atom atom .)
+    VEE             reduce using rule 34 (posprod -> atom atom .)
+    RBRACKET        reduce using rule 34 (posprod -> atom atom .)
+    TIMES           shift and go to state 36
+    HAT             shift and go to state 38
+    FACT            shift and go to state 39
+    LPAREN          shift and go to state 17
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    atom                           shift and go to state 35
+    posprod                        shift and go to state 37
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 36
+
+    (33) posprod -> atom TIMES . factor
+    (35) posprod -> atom TIMES . prod
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    atom                           shift and go to state 12
+    factor                         shift and go to state 51
+    prod                           shift and go to state 52
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 37
+
+    (36) posprod -> atom posprod .
+
+    PLUS            reduce using rule 36 (posprod -> atom posprod .)
+    MINUS           reduce using rule 36 (posprod -> atom posprod .)
+    $end            reduce using rule 36 (posprod -> atom posprod .)
+    RPAREN          reduce using rule 36 (posprod -> atom posprod .)
+    VEE             reduce using rule 36 (posprod -> atom posprod .)
+    RBRACKET        reduce using rule 36 (posprod -> atom posprod .)
+
+
+state 38
+
+    (21) expo -> atom HAT . LBRACKET expr RBRACKET
+    (22) expo -> atom HAT . atom
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LBRACKET        shift and go to state 54
+    LPAREN          shift and go to state 17
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    atom                           shift and go to state 53
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 39
+
+    (39) factorial -> atom FACT .
+
+    TIMES           reduce using rule 39 (factorial -> atom FACT .)
+    HAT             reduce using rule 39 (factorial -> atom FACT .)
+    FACT            reduce using rule 39 (factorial -> atom FACT .)
+    LPAREN          reduce using rule 39 (factorial -> atom FACT .)
+    INTEGER         reduce using rule 39 (factorial -> atom FACT .)
+    FLOAT           reduce using rule 39 (factorial -> atom FACT .)
+    SYMBOL          reduce using rule 39 (factorial -> atom FACT .)
+    FRAC            reduce using rule 39 (factorial -> atom FACT .)
+    SQRT            reduce using rule 39 (factorial -> atom FACT .)
+    PLUS            reduce using rule 39 (factorial -> atom FACT .)
+    MINUS           reduce using rule 39 (factorial -> atom FACT .)
+    $end            reduce using rule 39 (factorial -> atom FACT .)
+    RPAREN          reduce using rule 39 (factorial -> atom FACT .)
+    VEE             reduce using rule 39 (factorial -> atom FACT .)
+    RBRACKET        reduce using rule 39 (factorial -> atom FACT .)
+
+
+state 40
+
+    (16) atom -> LPAREN expr . RPAREN
+
+    RPAREN          shift and go to state 55
+
+
+state 41
+
+    (37) fraction -> FRAC LBRACKET . expr RBRACKET LBRACKET expr RBRACKET
+    (6) expr -> . term
+    (7) expr -> . sum
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    expr                           shift and go to state 56
+    term                           shift and go to state 5
+    sum                            shift and go to state 6
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    atom                           shift and go to state 12
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 42
+
+    (38) sqrt -> SQRT LBRACKET . expr RBRACKET
+    (6) expr -> . term
+    (7) expr -> . sum
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    expr                           shift and go to state 57
+    term                           shift and go to state 5
+    sum                            shift and go to state 6
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    atom                           shift and go to state 12
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 43
+
+    (3) answers -> answer VEE answers .
+
+    $end            reduce using rule 3 (answers -> answer VEE answers .)
+
+
+state 44
+
+    (5) answer -> sym . EQUALS expr
+
+    EQUALS          shift and go to state 29
+
+
+state 45
+
+    (26) sum -> term PLUS term .
+    (26) sum -> term . PLUS term
+    (27) sum -> term . MINUS term
+    (28) sum -> term . PLUS sum
+    (29) sum -> term . MINUS sum
+
+    $end            reduce using rule 26 (sum -> term PLUS term .)
+    RPAREN          reduce using rule 26 (sum -> term PLUS term .)
+    VEE             reduce using rule 26 (sum -> term PLUS term .)
+    RBRACKET        reduce using rule 26 (sum -> term PLUS term .)
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+
+
+state 46
+
+    (28) sum -> term PLUS sum .
+
+    $end            reduce using rule 28 (sum -> term PLUS sum .)
+    RPAREN          reduce using rule 28 (sum -> term PLUS sum .)
+    VEE             reduce using rule 28 (sum -> term PLUS sum .)
+    RBRACKET        reduce using rule 28 (sum -> term PLUS sum .)
+
+
+state 47
+
+    (27) sum -> term MINUS term .
+    (26) sum -> term . PLUS term
+    (27) sum -> term . MINUS term
+    (28) sum -> term . PLUS sum
+    (29) sum -> term . MINUS sum
+
+    $end            reduce using rule 27 (sum -> term MINUS term .)
+    RPAREN          reduce using rule 27 (sum -> term MINUS term .)
+    VEE             reduce using rule 27 (sum -> term MINUS term .)
+    RBRACKET        reduce using rule 27 (sum -> term MINUS term .)
+    PLUS            shift and go to state 27
+    MINUS           shift and go to state 28
+
+
+state 48
+
+    (29) sum -> term MINUS sum .
+
+    $end            reduce using rule 29 (sum -> term MINUS sum .)
+    RPAREN          reduce using rule 29 (sum -> term MINUS sum .)
+    VEE             reduce using rule 29 (sum -> term MINUS sum .)
+    RBRACKET        reduce using rule 29 (sum -> term MINUS sum .)
+
+
+state 49
+
+    (5) answer -> sym EQUALS expr .
+
+    VEE             reduce using rule 5 (answer -> sym EQUALS expr .)
+    $end            reduce using rule 5 (answer -> sym EQUALS expr .)
+
+
+state 50
+
+    (12) minop -> MINUS atom .
+    (21) expo -> atom . HAT LBRACKET expr RBRACKET
+    (22) expo -> atom . HAT atom
+    (39) factorial -> atom . FACT
+
+    PLUS            reduce using rule 12 (minop -> MINUS atom .)
+    MINUS           reduce using rule 12 (minop -> MINUS atom .)
+    $end            reduce using rule 12 (minop -> MINUS atom .)
+    RPAREN          reduce using rule 12 (minop -> MINUS atom .)
+    VEE             reduce using rule 12 (minop -> MINUS atom .)
+    RBRACKET        reduce using rule 12 (minop -> MINUS atom .)
+    HAT             shift and go to state 38
+    FACT            shift and go to state 39
+
+
+state 51
+
+    (33) posprod -> atom TIMES factor .
+
+    PLUS            reduce using rule 33 (posprod -> atom TIMES factor .)
+    MINUS           reduce using rule 33 (posprod -> atom TIMES factor .)
+    $end            reduce using rule 33 (posprod -> atom TIMES factor .)
+    RPAREN          reduce using rule 33 (posprod -> atom TIMES factor .)
+    VEE             reduce using rule 33 (posprod -> atom TIMES factor .)
+    RBRACKET        reduce using rule 33 (posprod -> atom TIMES factor .)
+
+
+state 52
+
+    (35) posprod -> atom TIMES prod .
+
+    PLUS            reduce using rule 35 (posprod -> atom TIMES prod .)
+    MINUS           reduce using rule 35 (posprod -> atom TIMES prod .)
+    $end            reduce using rule 35 (posprod -> atom TIMES prod .)
+    RPAREN          reduce using rule 35 (posprod -> atom TIMES prod .)
+    VEE             reduce using rule 35 (posprod -> atom TIMES prod .)
+    RBRACKET        reduce using rule 35 (posprod -> atom TIMES prod .)
+
+
+state 53
+
+    (22) expo -> atom HAT atom .
+    (21) expo -> atom . HAT LBRACKET expr RBRACKET
+    (22) expo -> atom . HAT atom
+    (39) factorial -> atom . FACT
+
+    TIMES           reduce using rule 22 (expo -> atom HAT atom .)
+    HAT             reduce using rule 22 (expo -> atom HAT atom .)
+    FACT            reduce using rule 22 (expo -> atom HAT atom .)
+    LPAREN          reduce using rule 22 (expo -> atom HAT atom .)
+    INTEGER         reduce using rule 22 (expo -> atom HAT atom .)
+    FLOAT           reduce using rule 22 (expo -> atom HAT atom .)
+    SYMBOL          reduce using rule 22 (expo -> atom HAT atom .)
+    FRAC            reduce using rule 22 (expo -> atom HAT atom .)
+    SQRT            reduce using rule 22 (expo -> atom HAT atom .)
+    PLUS            reduce using rule 22 (expo -> atom HAT atom .)
+    MINUS           reduce using rule 22 (expo -> atom HAT atom .)
+    $end            reduce using rule 22 (expo -> atom HAT atom .)
+    RPAREN          reduce using rule 22 (expo -> atom HAT atom .)
+    VEE             reduce using rule 22 (expo -> atom HAT atom .)
+    RBRACKET        reduce using rule 22 (expo -> atom HAT atom .)
+
+  ! HAT             [ shift and go to state 38 ]
+  ! FACT            [ shift and go to state 39 ]
+
+
+state 54
+
+    (21) expo -> atom HAT LBRACKET . expr RBRACKET
+    (6) expr -> . term
+    (7) expr -> . sum
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    atom                           shift and go to state 12
+    expr                           shift and go to state 58
+    term                           shift and go to state 5
+    sum                            shift and go to state 6
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 55
+
+    (16) atom -> LPAREN expr RPAREN .
+
+    TIMES           reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    HAT             reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    FACT            reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    LPAREN          reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    INTEGER         reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    FLOAT           reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    SYMBOL          reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    FRAC            reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    SQRT            reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    PLUS            reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    MINUS           reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    $end            reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    VEE             reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+    RBRACKET        reduce using rule 16 (atom -> LPAREN expr RPAREN .)
+
+
+state 56
+
+    (37) fraction -> FRAC LBRACKET expr . RBRACKET LBRACKET expr RBRACKET
+
+    RBRACKET        shift and go to state 59
+
+
+state 57
+
+    (38) sqrt -> SQRT LBRACKET expr . RBRACKET
+
+    RBRACKET        shift and go to state 60
+
+
+state 58
+
+    (21) expo -> atom HAT LBRACKET expr . RBRACKET
+
+    RBRACKET        shift and go to state 61
+
+
+state 59
+
+    (37) fraction -> FRAC LBRACKET expr RBRACKET . LBRACKET expr RBRACKET
+
+    LBRACKET        shift and go to state 62
+
+
+state 60
+
+    (38) sqrt -> SQRT LBRACKET expr RBRACKET .
+
+    TIMES           reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    HAT             reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    FACT            reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    LPAREN          reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    INTEGER         reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    FLOAT           reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    SYMBOL          reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    FRAC            reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    SQRT            reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    PLUS            reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    MINUS           reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    $end            reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    RPAREN          reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    VEE             reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+    RBRACKET        reduce using rule 38 (sqrt -> SQRT LBRACKET expr RBRACKET .)
+
+
+state 61
+
+    (21) expo -> atom HAT LBRACKET expr RBRACKET .
+
+    TIMES           reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    HAT             reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    FACT            reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    LPAREN          reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    INTEGER         reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    FLOAT           reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    SYMBOL          reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    FRAC            reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    SQRT            reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    PLUS            reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    MINUS           reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    $end            reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    RPAREN          reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    VEE             reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+    RBRACKET        reduce using rule 21 (expo -> atom HAT LBRACKET expr RBRACKET .)
+
+
+state 62
+
+    (37) fraction -> FRAC LBRACKET expr RBRACKET LBRACKET . expr RBRACKET
+    (6) expr -> . term
+    (7) expr -> . sum
+    (8) term -> . factor
+    (9) term -> . prod
+    (26) sum -> . term PLUS term
+    (27) sum -> . term MINUS term
+    (28) sum -> . term PLUS sum
+    (29) sum -> . term MINUS sum
+    (10) factor -> . atom
+    (11) factor -> . minop
+    (30) prod -> . negprod
+    (31) prod -> . posprod
+    (14) atom -> . num
+    (15) atom -> . sym
+    (16) atom -> . LPAREN expr RPAREN
+    (17) atom -> . fraction
+    (18) atom -> . sqrt
+    (19) atom -> . expo
+    (20) atom -> . factorial
+    (12) minop -> . MINUS atom
+    (13) minop -> . MINUS minop
+    (32) negprod -> . MINUS posprod
+    (33) posprod -> . atom TIMES factor
+    (34) posprod -> . atom atom
+    (35) posprod -> . atom TIMES prod
+    (36) posprod -> . atom posprod
+    (23) num -> . INTEGER
+    (24) num -> . FLOAT
+    (25) sym -> . SYMBOL
+    (37) fraction -> . FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET
+    (38) sqrt -> . SQRT LBRACKET expr RBRACKET
+    (21) expo -> . atom HAT LBRACKET expr RBRACKET
+    (22) expo -> . atom HAT atom
+    (39) factorial -> . atom FACT
+
+    LPAREN          shift and go to state 17
+    MINUS           shift and go to state 10
+    INTEGER         shift and go to state 22
+    FLOAT           shift and go to state 23
+    SYMBOL          shift and go to state 11
+    FRAC            shift and go to state 24
+    SQRT            shift and go to state 25
+
+    expr                           shift and go to state 63
+    term                           shift and go to state 5
+    sum                            shift and go to state 6
+    factor                         shift and go to state 8
+    prod                           shift and go to state 9
+    atom                           shift and go to state 12
+    minop                          shift and go to state 13
+    negprod                        shift and go to state 14
+    posprod                        shift and go to state 15
+    num                            shift and go to state 16
+    sym                            shift and go to state 34
+    fraction                       shift and go to state 18
+    sqrt                           shift and go to state 19
+    expo                           shift and go to state 20
+    factorial                      shift and go to state 21
+
+state 63
+
+    (37) fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr . RBRACKET
+
+    RBRACKET        shift and go to state 64
+
+
+state 64
+
+    (37) fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .
+
+    TIMES           reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    HAT             reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    FACT            reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    LPAREN          reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    INTEGER         reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    FLOAT           reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    SYMBOL          reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    FRAC            reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    SQRT            reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    PLUS            reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    MINUS           reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    $end            reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    RPAREN          reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    VEE             reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+    RBRACKET        reduce using rule 37 (fraction -> FRAC LBRACKET expr RBRACKET LBRACKET expr RBRACKET .)
+
