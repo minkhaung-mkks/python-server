@@ -1,5 +1,8 @@
 # n_funcs/n_func.py
-
+"""Simple library to parse and manipulate LaTeX math expressions.
+Not entirely finished and tested yet, but currently provides the basis.
+Author: Robbie Koevoets
+"""
 from .n1 import N1
 from .n2 import N2
 from .n3 import N3
