@@ -1,0 +1,60 @@
+{
+  "n": "1",
+  "ia": [
+    {
+      "hint": "Je moet de rekenvolgorde aanhouden.",
+      "steps": [
+        {
+          "step": "$64\\cdot(6-16)\\cdot12$",
+          "explanation": "Je hebt de rekenvolgorde niet aangehouden."
+        },
+        {
+          "step": "$$64\\cdot(-10)\\cdot12$$",
+          "explanation": "Bereken $6-16$."
+        },
+        {
+          "step": "$$-640\\cdot12$$",
+          "explanation": "Bereken $64\\cdot(-10)$."
+        },
+        { "step": "$$-7680$$", "explanation": "Bereken $-640\\cdot12$." }
+      ],
+      "value": "$$-7680$$",
+      "mistakeStep": 2
+    },
+    {
+      "hint": "Je moet de rekenvolgorde aanhouden.",
+      "steps": [
+        {
+          "step": "$(384-16)\\cdot12$",
+          "explanation": "Je hebt de rekenvolgorde niet aangehouden."
+        },
+        { "step": "$368\\cdot12$", "explanation": "Bereken $368\\cdot12$." },
+        { "step": "$4416$", "explanation": "Bereken $368\\cdot 12$." }
+      ],
+      "value": "$4416$",
+      "mistakeStep": 3
+    }
+  ],
+  "answer": "$192$",
+  "correctSteps": [
+    {
+      "step": "$(138-74)\\cdot 6 - 16\\cdot 12$",
+      "explanation": "Dit is de gegeven vergelijking."
+    },
+    {
+      "step": "$(64)\\cdot 6 - 16\\cdot 12$",
+      "explanation": "Bereken $138 - 74$."
+    },
+    {
+      "step": "$384 - 16\\cdot 12$",
+      "explanation": "Dit is de gegeven vergelijking."
+    },
+    {
+      "step": "$(64)\\cdot 6 - 16\\cdot 12$",
+      "explanation": "Bereken $138 - 74$."
+    },
+    { "step": "$384 - 16\\cdot 12$", "explanation": "Bereken $64 \\cdot 6$." },
+    { "step": "$384 - 192$", "explanation": "Bereken $16 \\cdot 12$." },
+    { "step": "$192$", "explanation": "Bereken $384 - 192$." }
+  ]
+}

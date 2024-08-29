@@ -8,9 +8,6 @@ app = Flask(__name__)
 allowed_origins = [
     "http://localhost:5174",
     "http://localhost:5173",
-    "https://yourfirstdomain.com",
-    "https://yourseconddomain.com",
-    "https://yourthirddomain.com"
 ]
 
 # Enable CORS for the specified origins
@@ -94,28 +91,20 @@ def check_user_answer():
     if 'id' not in data or 'userAnswer' not in data or 'expectedN' not in data:
         return jsonify({"error": "Missing required fields"}), 400
 
-    entry_id = data['id']
+    aiJSON = data['AI_JSON']
+
     user_answer = data['userAnswer']
     expected_n = data['expectedN']
-
-    # Find the entry by ID in the database
-    entry = collection.find_one({"id": entry_id})
-    if not entry:
-        return jsonify({"error": "Entry not found"}), 404
-
-    # Get the stored nAnswers from the entry
-    stored_nAnswers = entry.get('nAnswers', {})
-
     # Generate nAnswers using apply_n_func based on the user's input
+    max_nLevel = 4  # Assuming N1, N2, N3, and N4 are available
     generated_answers = apply_n_func(expected_n, user_answer)
-
+    nAnswers = apply_n_func(max_nLevel, aiJSON["ia"]["value"])
     # Initialize the result dictionary
     result = {"answer": "correct"}
-
     # Compare each level's answer
     for i in range(1, expected_n + 1):
         key = f'N{i}'
-        if stored_nAnswers.get(key) == generated_answers.get(key):
+        if nAnswers.get(key) == generated_answers.get(key):
             result[key] = "correct"
         else:
             result[key] = "incorrect"
