@@ -1,12 +1,11 @@
 from flask import Flask, request, jsonify
 from n_funs.n_func import apply_n_func
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS
 
 app = Flask(__name__)
 allowed_origins = [
     "http://localhost:5174",
     "http://localhost:5173",
-    "https://@test.com"
 ]
 
 # Enable CORS for the specified origins
@@ -15,99 +14,124 @@ CORS(app, origins=allowed_origins)
 
 @app.route('/checkUserAnswer', methods=['POST'])
 def check_user_answer():
-    data = request.json
+    try:
+        data = request.json
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        # Validate the expected keys in the JSON payload
+        if 'AI_JSON' not in data or 'userAnswer' not in data:
+            return jsonify({"error": "Missing required fields 'AI_JSON' or 'userAnswer'"}), 400
+        
+        aiJSON = data['AI_JSON']
+        user_answer = data['userAnswer']
 
-    aiJSON = data['AI_JSON']
-    user_answer = data['userAnswer']
-    expected_n = aiJSON['n']
-    incorrectAnswers = aiJSON['ia']
+        if 'n' not in aiJSON or 'ia' not in aiJSON or 'answer' not in aiJSON or 'correctSteps' not in aiJSON:
+            return jsonify({"error": "AI_JSON missing required fields 'n', 'ia', 'answer', or 'correctSteps'"}), 400
+        
+        expected_n = int(aiJSON['n'])
+        incorrectAnswers = aiJSON['ia']
 
-    # Generate nAnswers using apply_n_func based on the user's input
-    max_nLevel = 4  # max number of available n funcs
+        if not isinstance(expected_n, int) or not isinstance(incorrectAnswers, list):
+            return jsonify({"error": "'n' should be an integer and 'ia' should be a list"}), 400
 
-    generated_answers = apply_n_func(max_nLevel, user_answer)
-    nAnswers = apply_n_func(max_nLevel, aiJSON["answer"])
+        # Generate nAnswers using apply_n_func based on the user's input
+        max_nLevel = 4  # max number of available n funcs
 
-    # Initialize the result dictionary
-    result = {"answer": "correct"}
-    eq = False
+        generated_answers = apply_n_func(max_nLevel, user_answer)
+        nAnswers = apply_n_func(max_nLevel, aiJSON["answer"])
+        print(nAnswers)
+        # Initialize the result dictionary
+        result = {"answer": "correct"}
+        eq = False
+        print(eq)
 
-    # Compare each level's answer
-    for i in range(1, expected_n + 1):
-        key = f'N{i}'
-        if nAnswers.get(key) == generated_answers.get(key):
-            result[key] = "correct"
-            eq = True
-        else:
-            result[key] = "incorrect"
-            if i == expected_n:
-                result["nStatus"] = "incorrect"
-
-    sa = {
-        "steps": aiJSON['correctSteps'],
-        "value": user_answer,
-        "ms": 0,
-        "nStatus": {"n": expected_n, "status": result.get("nStatus", "correct")}
-    }
-
-    if not eq:
-        result['answer'] = "incorrect"
-        for incorrect in incorrectAnswers:
-            result = {"ia": "correct"}
-            nIa = apply_n_func(max_nLevel, incorrect['value'])
-            for i in range(1, expected_n + 1):
-                key = f'N{i}'
-                if nIa.get(key) == generated_answers.get(key):
-                    result[key] = "correct"
-                    eq = True
-                else:
-                    result[key] = "incorrect"
-                    if i == expected_n:
-                        result["ia"] = "incorrect"
-            if eq:
-                sa = {
-                    "value": incorrect['value'],
-                    "steps": incorrect['steps'],
-                    "nStatus": {"n": expected_n, "status": result["ia"]},
-                    "mistakeStep": incorrect['mistakeStep']
-                }
-                break
-
-    if not eq:
+        # Compare each level's answer
+        for i in range(1, expected_n + 1):
+            key = f'N{i}'
+            if nAnswers.get(key) == generated_answers.get(key):
+                result[key] = "correct"
+                eq = True
+            else:
+                result[key] = "incorrect"
+                if i == expected_n:
+                    result["nStatus"] = "incorrect"
         sa = {
-            "value": 'n/a',
-            "steps": [{"step": 'none', "explanation": 'none'}],
-            "nStatus": {"status": 'failed', "n": 0},
-            "mistakeStep": 0
+            "steps": aiJSON['correctSteps'],
+            "value": user_answer,
+            "mistakeStep": 0,
+            "nStatus": {"n": expected_n, "status": result.get("nStatus", "correct")}
         }
+        print(eq)
+        print(sa)
 
-    returnData = {
-        "status": result["answer"],
-        "nStatus": sa["nStatus"],
-        "correctAnswer": aiJSON['answer'],
-        "correctSteps": aiJSON['correctSteps'],
-        "selectedAnswer": sa["value"],
-        "selectedAnswerSteps": sa["steps"],
-        "mistakeStep": sa["mistakeStep"],
-        "userAnswer": user_answer,
-    }
-    
+        if not eq:
+            print('--------------')
+            print(incorrectAnswers)
+            result['answer'] = "incorrect"
+            for incorrect in incorrectAnswers:
+                print(incorrect)
+                if 'value' not in incorrect or 'steps' not in incorrect or 'mistakeStep' not in incorrect:
+                    continue  # Skip this incorrect answer if required fields are missing
+                result["ia"] ="correct"
+                nIa = apply_n_func(max_nLevel, incorrect['value'])
+                print(nIa)
+                for i in range(1, expected_n + 1):
+                    key = f'N{i}'
+                    if nIa.get(key) == generated_answers.get(key):
+                        result[key] = "correct"
+                        eq = True
+                    else:
+                        result[key] = "incorrect"
+                        if i == expected_n:
+                            result["ia"] = "incorrect"
+                if eq:
+                    sa = {
+                        "value": incorrect['value'],
+                        "steps": incorrect['steps'],
+                        "nStatus": {"n": expected_n, "status": result["ia"]},
+                        "mistakeStep": incorrect['mistakeStep']
+                    }
+                    break
 
-    # both status and nStatus.status need be correct for a student to be correct.
-    # if only status is correct they have the correct answer but wrong format
-    # if only nStatus is correct that means they have made a logical mistake but in correct format
-    # if both are incorrect but are returning valid data that means they made a logical mistake but wrong format
-    # if data is like this
-    # "value": 'n/a',
-    # "steps": [{"step": 'none', "explanation": 'none'}],
-    # "nStatus": {"status": 'failed', "n": 0},
-    # "mistakeStep": 0
-    #  The student has made an illogical or uncaught misake
-    #  on the last case, I believe the intention is to not even show the solution panel 
-    #  instead just tell them they are wrong and move on
-    return jsonify(returnData), 200
+        if not eq:
+            sa = {
+                "value": 'n/a',
+                "steps": [{"step": 'none', "explanation": 'none'}],
+                "nStatus": {"status": 'failed', "n": 0},
+                "mistakeStep": 0
+            }
+        print(result)
+        print(sa['nStatus'])
+        print(sa['value'])
+        print(sa['steps'])
+        print(sa['mistakeStep'])
+        print(aiJSON['correctSteps'])
+        print(aiJSON['answer'])
+        print(result['answer'])
+        print(user_answer)
+        print(result)
+        returnData = {
+            "status": result["answer"],
+            "nStatus": sa["nStatus"],
+            "correctAnswer": aiJSON['answer'],
+            "correctSteps": aiJSON['correctSteps'],
+            "selectedAnswer": sa["value"],
+            "selectedAnswerSteps": sa["steps"],
+            "mistakeStep": sa["mistakeStep"],
+            "userAnswer": user_answer,
+        }
+        print(returnData)
+
+        return jsonify(returnData), 200
+
+    except KeyError as e:
+        return jsonify({"error": f"Missing key: {str(e)}"}), 400
+    except TypeError as e:
+        return jsonify({"error": f"Type error: {str(e)}"}), 400
+    except Exception as e:
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
 
 
 if __name__ == '__main__':
-	  app.run(host='0.0.0.0', port=8000)
-
+    app.run()
