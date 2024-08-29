@@ -2,4 +2,3 @@ Flask==3.0.3
 Flask-Cors==4.0.1
 gunicorn==23.0.0
 ply==3.11
-pymongo==4.8.0
