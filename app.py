@@ -98,7 +98,8 @@ def check_user_answer():
     # Generate nAnswers using apply_n_func based on the user's input
     max_nLevel = 4  # Assuming N1, N2, N3, and N4 are available
     generated_answers = apply_n_func(expected_n, user_answer)
-    nAnswers = apply_n_func(max_nLevel, aiJSON["ia"]["value"])
+    nAnswers = apply_n_func(max_nLevel, aiJSON["answer"])
+
     # Initialize the result dictionary
     result = {"answer": "correct"}
     # Compare each level's answer
