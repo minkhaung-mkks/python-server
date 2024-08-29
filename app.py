@@ -11,8 +11,6 @@ allowed_origins = [
 # Enable CORS for the specified origins
 CORS(app, origins=allowed_origins)
 
-# Replace with your actual MongoDB connection string
-DATABASE_URI = "mongodb+srv://SSN:LO4uCW9mK8OpBQAp@atlascluster.bnamshy.mongodb.net/Bijlex?retryWrites=true&w=majority"
 
 @app.route('/checkUserAnswer', methods=['POST'])
 def check_user_answer():
