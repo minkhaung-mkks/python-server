@@ -59,7 +59,7 @@ def check_user_answer():
             else:
                 result[key] = "incorrect"
                 if i == expected_n:
-                    result["nStatus"] = "incorrect"
+                    result["nStatus"] = "failed"
         sa = {
             "steps": aiJSON['correctSteps'],
             "value": user_answer,
