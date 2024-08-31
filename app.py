@@ -76,7 +76,7 @@ def check_user_answer():
                     continue  # Skip this incorrect answer if required fields are missing
                 result["ia"] ="correct"
                 nIa = apply_n_func(max_nLevel, incorrect['value'])
-                for i in range(1, expected_n + 1):
+                for i in range(1, max_nLevel + 1):
                     key = f'N{i}'
                     if nIa.get(key) == generated_answers.get(key):
                         result[key] = "correct"
