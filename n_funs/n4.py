@@ -2,7 +2,14 @@ from functools import reduce
 
 from .data_types import *
 from .n3 import N3, get_coefficients, divide_fraction
+from .n2 import N2
 from .util_trav import cleanup_traversals
+
+
+def real_addition(num):
+    num_str = str(num)
+    num_str = num_str.replace("+", "+")
+    return num_str
 
 
 def trav_evaluate_square_root(root: Expr):
@@ -142,9 +149,9 @@ def trav_n4_rule1(root: Expr):
     return root
 
 
-def trav_n4_rule4(root: Fraction):
+def trav_n4_rule4(root: Expr):
     """In a product of multiple factors, multiply the same variable together
-    and add the exponents. Also rewrite the constants into a single constant
+    and add the exponents. Also rewrite the constants into a single constant.
     """
     root.traverse_children(trav_n4_rule4)
 
@@ -153,6 +160,7 @@ def trav_n4_rule4(root: Fraction):
         if len(coeffs) == 0:
             coeffs.append(Number(1))
 
+        # Reduce coefficients to a single number
         result_coeff = reduce(lambda x, y: x * y, coeffs)
 
         new_mul = root.create_copy(False)
@@ -161,32 +169,27 @@ def trav_n4_rule4(root: Fraction):
         # Gather variables and their exponents
         var_factors = root.get_factors(lambda x: not isinstance(x, Number))
         var_groups = []
+        
         for var_a in var_factors:
-            for (var_b, exp_sum) in var_groups:
+            var_a.exponent = var_a.exponent or Number(1)  # Ensure exponent is set to 1 if None
+
+            for i, (var_b, exp_sum) in enumerate(var_groups):
                 exp_sum: Sum
 
-                # Create a copy of both terms, but remove the exponent
-                # so they can be compared.
                 var_a_no_exp = var_a.create_copy(True)
-                var_a_no_exp.exponent = 1
+                var_a_no_exp.exponent = Number(1)
 
                 var_b_no_exp = var_b.create_copy(True)
-                var_b_no_exp.exponent = 1
+                var_b_no_exp.exponent = Number(1)
 
                 if var_a_no_exp == var_b_no_exp:
-                    if type(var_a) in [int, float]:
-                        exp_sum.add_term(-1, Number(var_a.exponent, type(temp) == int), False)
-                    else:
-                        exp_sum.add_term(-1, var_a.exponent, False)
-
+                    # Sum up the exponents numerically
+                    exp_sum = exp_sum + var_a.exponent
+                    var_groups[i] = (var_b, exp_sum)
                     break
             else:
-                temp = var_a.exponent
-
-                if type(temp) == int or type(temp) == float:
-                    temp = Number(temp, type(temp) == int)
-
-                var_groups.append((var_a, Sum([temp])))
+                # If no match found, add as a new group
+                var_groups.append((var_a, var_a.exponent))
 
         # Evaluate the exponents in each sum and convert the entire thing to a
         # new multiplication
@@ -203,11 +206,14 @@ def trav_n4_rule4(root: Fraction):
 
 def N4(input_str):
     ast_root = N3(input_str)
+    ast_root = real_addition(ast_root)
+    ast_root = N3(ast_root)
 
     ast_root = trav_evaluate_square_root(ast_root)
     ast_root = trav_sum_similar_terms(ast_root)
     ast_root = trav_n4_rule1(ast_root)
     ast_root = trav_n4_rule4(ast_root)
+
 
     ast_root = cleanup_traversals(ast_root)
 

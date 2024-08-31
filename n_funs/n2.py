@@ -14,6 +14,7 @@ def trav_sort_expressions(root: Expr):
 
     # Finally sort this node if it is sortable
     if isinstance(root, (Sum, Mul)):
+
         root.sort_children()
 
     return root
@@ -79,64 +80,86 @@ def divide_fraction(frac: Fraction):
 
 def trav_split_fractions(root: Expr):
     """For every fraction in an expression, check if there is a factor in the
-    numerator and denominator that can be split off in a seperate fraction.
+    numerator and denominator that can be split off in a separate fraction.
     """
     root.traverse_children(trav_split_fractions)
 
-    # Check if a number in the numerator and denominator have gcd = 1
     if isinstance(root, Fraction):
         num_coeffs = get_coefficients(root.num)
         denom_coeffs = get_coefficients(root.denom)
 
-        # Don't perform this transformation if there are multiple coefficients.
-        if len(num_coeffs) != 1 or len(denom_coeffs) != 1:
-            return root
+        # Initialize fractions
+        numeric_fraction = None
+        variable_fraction = None
 
-        m = num_coeffs[0]
-        n = denom_coeffs[0]
+        if num_coeffs and not denom_coeffs:
+            # Case: Numbers only in numerator
+            numeric_num = num_coeffs[0]
+            if isinstance(root.num, Mul) and not root.num.has_parens:
+                root.num.remove_factor(numeric_num)
+                variable_num = root.num if len(root.num.factors) > 1 else root.num.factors[0]
+            else:
+                variable_num = root.num
 
-        if m.is_integer and n.is_integer and math.gcd(m.value, n.value) != 1:
-            return root
+            numeric_denom = root.denom
+            variable_denom = Number(1)
 
-        # Convert m and n to proper fractions (gcd = 1)
-        pq = fractions.Fraction(m.value * (-1 if m.is_negative else 1)).limit_denominator()
-        rs = fractions.Fraction(n.value * (-1 if n.is_negative else 1)).limit_denominator()
+            numeric_fraction = Fraction(numeric_num, numeric_denom)
+            variable_fraction = Fraction(variable_num, variable_denom)
 
-        ps = pq.numerator * rs.denominator
-        qr = pq.denominator * rs.numerator
+        elif denom_coeffs and not num_coeffs:
+            # Case: Numbers only in denominator
+            numeric_denom = denom_coeffs[0]
 
-        a = ps / math.gcd(ps, qr)
-        b = qr / math.gcd(ps, qr)
+            if isinstance(root.denom, Mul) and not root.denom.has_parens:
+                root.denom.remove_factor(numeric_denom)
+                variable_denom = root.denom if len(root.denom.factors) > 1 else root.denom.factors[0]
+            else:
+                variable_denom = root.denom
 
-        a = Number(int(a))
-        b = Number(int(b))
+            numeric_num = root.num
+            variable_num = Number(1)
 
-        # Remove the numbers from the original fraction
-        if isinstance(root.num, Mul) and not root.num.has_parens:
-            root.num.remove_factor(m)
+            numeric_fraction = Fraction(numeric_num, numeric_denom)
+            variable_fraction = Fraction(variable_num, variable_denom)
 
-            # If there is just one factor left, just change the expression
-            # to that factor
-            if len(root.num.factors) == 1:
-                root.num = root.num.factors[0]
+        elif num_coeffs and denom_coeffs:
+            # Case: Numbers in both numerator and denominator
+            numeric_num = num_coeffs[0]
+            numeric_denom = denom_coeffs[0]
 
-        if isinstance(root.denom, Mul) and not root.denom.has_parens:
-            root.denom.remove_factor(n)
+            if isinstance(root.num, Mul) and not root.num.has_parens:
+                root.num.remove_factor(numeric_num)
+                variable_num = root.num if len(root.num.factors) > 1 else root.num.factors[0]
+            else:
+                variable_num = root.num
 
-            if len(root.denom.factors) == 1:
-                root.denom = root.denom.factors[0]
+            if isinstance(root.denom, Mul) and not root.denom.has_parens:
+                root.denom.remove_factor(numeric_denom)
+                variable_denom = root.denom if len(root.denom.factors) > 1 else root.denom.factors[0]
+            else:
+                variable_denom = root.denom
 
-        new_frac = Fraction(a, b)
+            numeric_fraction = Fraction(numeric_num, numeric_denom)
+            variable_fraction = Fraction(variable_num, variable_denom)
 
-        # Create a new expression to multiply the expressions
-        new_root = Mul([])
+        # Check if fractions should be simplified
+        if numeric_fraction and isinstance(numeric_fraction.denom, Number) and numeric_fraction.denom.value == 1:
+            numeric_fraction = numeric_fraction.num
 
-        new_root.add_factor(0, root, False)
-        new_root.add_factor(0, new_frac, False)
+        if variable_fraction and isinstance(variable_fraction.denom, Number) and variable_fraction.denom.value == 1:
+            variable_fraction = variable_fraction.num
 
-        return new_root
+        if numeric_fraction and variable_fraction:
+            # Combine both fractions in multiplication
+            if isinstance(numeric_fraction, Expr) and isinstance(variable_fraction, Expr):
+                new_root = Mul([numeric_fraction, variable_fraction])
+            else:
+                new_root = numeric_fraction if numeric_fraction != Number(1) else variable_fraction
+            return new_root
 
     return root
+
 
 
 def float_to_fraction(expr: Expr):
