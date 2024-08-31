@@ -660,6 +660,9 @@ class Root(Expr):
                 return self.base == other.base
 
         return False
+    
+    def __len__(self):
+        return len(self.get_children())
 
 
 # Represents a factorial
