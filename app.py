@@ -64,14 +64,16 @@ def check_user_answer():
             "steps": aiJSON['correctSteps'],
             "value": user_answer,
             "mistakeStep": 0,
-            "nStatus": {"n": expected_n, "status": result.get("nStatus", "correct")}
+            "nStatus": {"n": expected_n, "status": result.get("nStatus", "correct")},
+            "hint": ""
         }
-        print(eq)
+        print(sa["hint"])
 
         if not eq:
             print('--------------')
             result['answer'] = "incorrect"
             for incorrect in incorrectAnswers:
+                print(incorrect['hint'])
                 if 'value' not in incorrect or 'steps' not in incorrect or 'mistakeStep' not in incorrect:
                     continue  # Skip this incorrect answer if required fields are missing
                 result["ia"] ="correct"
@@ -90,7 +92,8 @@ def check_user_answer():
                         "value": incorrect['value'],
                         "steps": incorrect['steps'],
                         "nStatus": {"n": expected_n, "status": result["ia"]},
-                        "mistakeStep": incorrect['mistakeStep']
+                        "mistakeStep": incorrect['mistakeStep'],
+                        "hint": incorrect['hint'] or ""
                     }
                     break
 
@@ -99,18 +102,20 @@ def check_user_answer():
                 "value": 'n/a',
                 "steps": [{"step": 'none', "explanation": 'none'}],
                 "nStatus": {"status": 'failed', "n": 0},
-                "mistakeStep": 0
+                "mistakeStep": 0,
+                "hint":""
             }
-        print(result)
-        print(sa['nStatus'])
-        print(sa['value'])
-        print(sa['steps'])
-        print(sa['mistakeStep'])
-        print(aiJSON['correctSteps'])
-        print(aiJSON['answer'])
-        print(result['answer'])
-        print(user_answer)
-        print(result)
+        # print(result)
+        # print(sa['nStatus'])
+        # print(sa['value'])
+        # print(sa['steps'])
+        # print(sa['mistakeStep'])
+        # print(aiJSON['correctSteps'])
+        # print(aiJSON['answer'])
+        # print(result['answer'])
+        # print(user_answer)
+        # print(result)
+        print(sa["hint"])
         returnData = {
             "status": result["answer"],
             "nStatus": sa["nStatus"],
@@ -120,6 +125,7 @@ def check_user_answer():
             "selectedAnswerSteps": sa["steps"],
             "mistakeStep": sa["mistakeStep"],
             "userAnswer": user_answer,
+            "hint": sa['hint']
         }
         print(returnData)
 

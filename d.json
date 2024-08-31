@@ -1,0 +1,52 @@
+{
+  "answer": "$196,95$",
+  "correctSteps": [
+    {
+      "step": "$3 \\cdot (45,85 + 7,23 + 12,57)$",
+      "explanation": "Dit is de gegeven vergelijking."
+    },
+    {
+      "step": "$3 \\cdot 65,65$",
+      "explanation": "Bereken $45,85 + 7,23 + 12,57$."
+    },
+    { "step": "$196,95$", "explanation": "Bereken $$3 \\cdot 65,65$$." }
+  ],
+  "n": "3",
+  "ia": [
+    {
+      "mistakeStep": 1,
+      "value": "$157,35$",
+      "hint": "Je moet de rekenvolgorde aanhouden.",
+      "steps": [
+        {
+          "step": "$3 \\cdot 45,85 + 7,23 + 12,57$",
+          "explanation": "Je hebt de rekenvolgorde niet aangehouden."
+        },
+        {
+          "step": "$137,55 + 7,23 + 12,57$",
+          "explanation": "Bereken $3 \\cdot 45,85$."
+        },
+        {
+          "step": "$157,35$",
+          "explanation": "Bereken $137,55 + 7,23 + 12,57$."
+        }
+      ]
+    },
+    {
+      "mistakeStep": 1,
+      "value": "$262,60$",
+      "hint": "Let op dat we nu een actie hebben waarbij we 4 halen en 3 betalen.",
+      "steps": [
+        {
+          "step": "$4 \\cdot (45,85 + 7,23 + 12,57)$",
+          "explanation": "Je hebt de prijzen met 4 vermenigvuldigt, maar je moest hem met 3 vermenigvuldigen."
+        },
+        {
+          "step": "$4 \\cdot 65,65$",
+          "explanation": "Bereken $45,85 + 7,23 + 12,57$."
+        },
+        { "step": "$262,60$", "explanation": "Bereken $4 \\cdot 65,65$." }
+      ]
+    }
+  ]
+}
