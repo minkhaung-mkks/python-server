@@ -84,7 +84,7 @@ def check_user_answer():
                     else:
                         result[key] = "incorrect"
                         if i == expected_n:
-                            result["ia"] = "incorrect"
+                            result["ia"] = "failed"
                 if eq:
                     sa = {
                         "value": incorrect['value'],
