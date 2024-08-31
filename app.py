@@ -40,17 +40,21 @@ def check_user_answer():
 
         generated_answers = apply_n_func(max_nLevel, user_answer)
         nAnswers = apply_n_func(max_nLevel, aiJSON["answer"])
-        print(nAnswers)
         # Initialize the result dictionary
         result = {"answer": "correct"}
         eq = False
         print(eq)
+        print(generated_answers)
+        print(nAnswers)
 
         # Compare each level's answer
-        for i in range(1, expected_n + 1):
+        for i in range(1, max_nLevel + 1):
             key = f'N{i}'
+            print(nAnswers.get(key))
+            print(generated_answers.get(key))
             if nAnswers.get(key) == generated_answers.get(key):
                 result[key] = "correct"
+                print("---------")
                 eq = True
             else:
                 result[key] = "incorrect"
@@ -63,19 +67,15 @@ def check_user_answer():
             "nStatus": {"n": expected_n, "status": result.get("nStatus", "correct")}
         }
         print(eq)
-        print(sa)
 
         if not eq:
             print('--------------')
-            print(incorrectAnswers)
             result['answer'] = "incorrect"
             for incorrect in incorrectAnswers:
-                print(incorrect)
                 if 'value' not in incorrect or 'steps' not in incorrect or 'mistakeStep' not in incorrect:
                     continue  # Skip this incorrect answer if required fields are missing
                 result["ia"] ="correct"
                 nIa = apply_n_func(max_nLevel, incorrect['value'])
-                print(nIa)
                 for i in range(1, expected_n + 1):
                     key = f'N{i}'
                     if nIa.get(key) == generated_answers.get(key):
