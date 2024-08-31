@@ -2,6 +2,7 @@ import re
 
 from .yacc import parser
 from .data_types import *
+from .data_types import LatexNormalizer
 from .util_trav import cleanup_traversals
 
 
@@ -12,6 +13,9 @@ def clean_string(latex_str):
 
     # Replace multiplication symbols with asterix
     temp = re.sub(r"\\times|\\cdot", '*', temp)
+
+    normalizer = LatexNormalizer(temp)
+    temp = normalizer.normalize()
 
     return temp
 

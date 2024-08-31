@@ -1,4 +1,44 @@
 import config
+import re
+
+
+class LatexNormalizer:
+    def __init__(self, latex_str):
+        self.latex_str = latex_str
+    
+    def normalize_fraction(self):
+        frac_pattern = r'\\frac\s*([^{}\s])\s*([^{}\s])'
+
+        normalized_str = re.sub(frac_pattern, r'\\frac{\1}{\2}', self.latex_str)
+
+        frac_pattern_with_one_brace = r'\\frac\s*{([^{}]*)}\s*([^{}\s])|\\frac\s*([^{}\s])\s*{([^{}]*)}'
+        normalized_str = re.sub(frac_pattern_with_one_brace, r'\\frac{\1\3}{\2\4}', normalized_str)
+        
+        return normalized_str
+
+    def normalize_square_root(self):
+        sqrt_pattern = r'\\sqrt\s*([^{}\s]|[^{}]*?(?=\s|$|\\|\^|_))'
+
+        normalized_str = re.sub(sqrt_pattern, r'\\sqrt{\1}', self.latex_str)
+
+        self.latex_str = normalized_str
+        return self.latex_str
+    
+    def normalize_power(self):
+        power_pattern = r'\^([^{}\s])'
+
+        normalized_str = re.sub(power_pattern, r'^{\1}', self.latex_str)
+        
+        return normalized_str
+
+    def normalize(self):
+        self.latex_str = self.normalize_fraction()
+        self.latex_str = self.normalize_square_root()
+        self.latex_str = self.normalize_power()
+
+        return self.latex_str
+
+
 
 
 def expr_key(expr):
@@ -32,6 +72,7 @@ def expr_key(expr):
         temp.append(str(expr))
 
     return (ordering[type(expr)], len(expr), tuple(temp), expr_key(expr.exponent))
+
 
 
 # Represents something that can be used in multiplication.
@@ -331,12 +372,22 @@ class Mul(Expr):
         return max_degree
 
     def sort_children(self) -> None:
-        # Similar to sorting sums, after sorting the order might change.
-        # So it is not logical to keep track of implicit multiplications by
-        # index anymore. So just set them all to explcit products.
-        self.is_implicit = [False for _ in self.factors]
+        original_indices = list(range(len(self.factors)))
+        
+        sorted_factors_with_indices = sorted(zip(self.factors, original_indices), key=lambda x: expr_key(x[0]))
+        sorted_factors, sorted_indices = zip(*sorted_factors_with_indices)
+        
+        self.factors = list(sorted_factors)
+        
+        if len(self.factors) > 1:
+            new_is_implicit = [False] * (len(self.factors) - 1)
+            for i in range(len(new_is_implicit)):
+                if sorted_indices[i] < len(self.is_implicit):
+                    new_is_implicit[i] = self.is_implicit[sorted_indices[i]]
+            self.is_implicit = new_is_implicit
+        else:
+            self.is_implicit = []
 
-        self.factors.sort(key=expr_key)
 
     def add_factor(self, index, factor: Expr, is_implicit=False) -> None:
         if index == -1:
@@ -357,7 +408,7 @@ class Mul(Expr):
 
         for i in range(1, len(self.factors)):
             if self.is_implicit[i - 1]:
-                temp += f"{self.factors[i]}"
+                temp += f" + {self.factors[i]}"
             else:
                 temp += f" * {self.factors[i]}"
 
@@ -562,12 +613,20 @@ class Fraction(Expr):
             temp.denom = self.denom.create_copy()
 
         return temp
+    
+    def is_numerical(self):
+        # Checks if both numerator and denominator are numbers
+        return isinstance(self.num, Number) and isinstance(self.denom, Number)
+
 
     def __eq__(self, other):
         if super().__eq__(other) and isinstance(other, Fraction):
             return self.num == other.num and self.denom == other.denom
 
         return False
+    
+    def __len__(self):
+        return len(self.get_children())
 
 
 # Class representing a square root

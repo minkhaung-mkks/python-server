@@ -34,6 +34,15 @@ def apply_n_func(n, input_str):
     for i in range(n):
         print(i + 1, N(i + 1, input_str))
 
+def apply_n_func_result_only(n, input_str):
+    results = []
+    results.append(input_str)
+    for i in range(n):
+        result = N(i + 1, input_str)
+        results.append(result)
+    # Print only the final result
+    print(results[-1])
+
 
 if __name__ == '__main__':
     args = sys.argv
@@ -44,6 +53,7 @@ if __name__ == '__main__':
         n_level = int(args[2])
 
         apply_n_func(n_level, raw_expr)
+        apply_n_func_result_only(n_level, raw_expr)
     else:
         print("Please provide a LaTeX expression and the n-level as follows:")
         print(r'> python main.py "\frac{a+b}{c}" 2')
