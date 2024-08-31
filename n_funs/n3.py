@@ -106,9 +106,25 @@ def trav_frac_to_dec(root: Expr):
 
     return root
 
+def switch_num_to_dec(root: Expr):
+    """Formats Number objects to three decimal places.
+    """
+    root.traverse_children(switch_num_to_dec)
+
+    if isinstance(root, Number):
+        value = root.get_value()
+        new_num = Number(float(value), False)
+        new_num.is_negative = root.is_negative
+        
+        return new_num
+
+    return root
+
 
 def N3(input_str):
     ast_root = N2(input_str)
+
+    ast_root = switch_num_to_dec(ast_root)
 
     ast_root = trav_distribute_exp_fraction(ast_root)
 
