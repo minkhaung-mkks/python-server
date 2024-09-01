@@ -1,9 +1,9 @@
 from functools import reduce
 
-from data_types import *
-from n3 import N3, get_coefficients, divide_fraction
-from n2 import N2
-from util_trav import cleanup_traversals
+from .data_types import *
+from .n3 import N3, get_coefficients, divide_fraction
+from .n2 import N2
+from .util_trav import cleanup_traversals
 
 
 def real_addition(num):

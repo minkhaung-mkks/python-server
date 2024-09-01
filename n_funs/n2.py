@@ -1,9 +1,9 @@
 import fractions
 import math
 
-from data_types import *
-from n1 import N1
-from util_trav import cleanup_traversals
+from .data_types import *
+from .n1 import N1
+from .util_trav import cleanup_traversals
 
 
 def trav_sort_expressions(root: Expr):
