@@ -1,14 +1,14 @@
 from functools import reduce
 
-from .data_types import *
-from .n3 import N3, get_coefficients, divide_fraction
-from .n2 import N2
-from .util_trav import cleanup_traversals
+from data_types import *
+from n3 import N3, get_coefficients, divide_fraction
+from n2 import N2
+from util_trav import cleanup_traversals
 
 
 def real_addition(num):
     num_str = str(num)
-    num_str = num_str.replace("+", "+")
+    num_str = num_str.replace("+", "+") 
     return num_str
 
 
@@ -160,18 +160,20 @@ def trav_n4_rule4(root: Expr):
         if len(coeffs) == 0:
             coeffs.append(Number(1))
 
-        # Reduce coefficients to a single number
-        result_coeff = reduce(lambda x, y: x * y, coeffs)
+        combined_value = 1.0 
+        for coeff in coeffs:
+            combined_value *= float(coeff.get_value()) 
+        
+        result_coeff = Number(combined_value) 
 
-        new_mul = root.create_copy(False)
-        new_mul.add_factor(-1, result_coeff)
+        new_mul = Mul([])  
+        new_mul.add_factor(-1, result_coeff)  
 
-        # Gather variables and their exponents
         var_factors = root.get_factors(lambda x: not isinstance(x, Number))
         var_groups = []
         
         for var_a in var_factors:
-            var_a.exponent = var_a.exponent or Number(1)  # Ensure exponent is set to 1 if None
+            var_a.exponent = var_a.exponent or Number(1) 
 
             for i, (var_b, exp_sum) in enumerate(var_groups):
                 exp_sum: Sum
@@ -183,25 +185,22 @@ def trav_n4_rule4(root: Expr):
                 var_b_no_exp.exponent = Number(1)
 
                 if var_a_no_exp == var_b_no_exp:
-                    # Sum up the exponents numerically
                     exp_sum = exp_sum + var_a.exponent
                     var_groups[i] = (var_b, exp_sum)
                     break
             else:
-                # If no match found, add as a new group
                 var_groups.append((var_a, var_a.exponent))
 
-        # Evaluate the exponents in each sum and convert the entire thing to a
-        # new multiplication
         for (var, exponents) in var_groups:
             temp = var
             temp.exponent = exponents
-
             new_mul.add_factor(-1, temp, False)
 
         return new_mul
 
     return root
+
+
 
 
 def N4(input_str):

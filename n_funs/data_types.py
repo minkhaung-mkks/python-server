@@ -261,6 +261,7 @@ class Number(Expr):
         else:
             raise TypeError("Cannot add this to Number instance")
 
+
 # Represents a symbol or variable
 class Symbol(Expr):
     def __init__(self, name):
@@ -611,6 +612,7 @@ class Fraction(Expr):
         if is_full_copy:
             temp.num = self.num.create_copy()
             temp.denom = self.denom.create_copy()
+
 
         return temp
     
