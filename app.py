@@ -132,12 +132,65 @@ def check_user_answer():
         return jsonify(returnData), 200
 
     except KeyError as e:
-        return jsonify({"error": f"Missing key: {str(e)}"}), 400
+        print("Key - EXpection")
+        print(e)
+        dread = {
+                
+            "status": "incorrect",
+            "nStatus": {
+                    "status":"failed",
+                    "n" : expected_n
+                },
+            "correctAnswer": aiJSON['answer'],
+            "correctSteps": aiJSON['correctSteps'],
+            "selectedAnswer": "n/a",
+            "selectedAnswerSteps": [{"step": 'none', "explanation": 'none'}],
+            "mistakeStep": 0,
+            "userAnswer": user_answer,
+            "hint":""
+        }
+        
+        return jsonify(dread), 200
     except TypeError as e:
-        return jsonify({"error": f"Type error: {str(e)}"}), 400
+        print("T-EXpection")
+        print(e)
+        dread = {
+                
+            "status": "incorrect",
+            "nStatus": {
+                    "status":"failed",
+                    "n" : expected_n
+                },
+            "correctAnswer": aiJSON['answer'],
+            "correctSteps": aiJSON['correctSteps'],
+            "selectedAnswer": "n/a",
+            "selectedAnswerSteps": [{"step": 'none', "explanation": 'none'}],
+            "mistakeStep": 0,
+            "userAnswer": user_answer,
+            "hint":""
+        }
+        
+        return jsonify(dread), 200
     except Exception as e:
-        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
-
+        print("EXpection")
+        print(e)
+        dread = {
+                
+            "status": "incorrect",
+            "nStatus": {
+                    "status":"failed",
+                    "n" : expected_n
+                },
+            "correctAnswer": aiJSON['answer'],
+            "correctSteps": aiJSON['correctSteps'],
+            "selectedAnswer": "n/a",
+            "selectedAnswerSteps": [{"step": 'none', "explanation": 'none'}],
+            "mistakeStep": 0,
+            "userAnswer": user_answer,
+            "hint":""
+        }
+        
+        return jsonify(dread), 200
 
 if __name__ == '__main__':
 	  app.run(host='0.0.0.0', port=8000)
