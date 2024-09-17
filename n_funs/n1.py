@@ -10,6 +10,7 @@ def clean_string(latex_str):
     # Remove whitespace and trailing periods
     temp = latex_str.rstrip('. ')
     temp = temp.lstrip()
+    temp = temp.lower()
 
     # Replace multiplication symbols with asterix
     temp = re.sub(r"\\times|\\cdot", '*', temp)
