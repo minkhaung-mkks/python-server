@@ -2,10 +2,11 @@ import config
 import re
 
 
+
 class LatexNormalizer:
     def __init__(self, latex_str):
         self.latex_str = latex_str
-    
+
     def normalize_fraction(self):
         frac_pattern = r'\\frac\s*([^{}\s])\s*([^{}\s])'
 
@@ -13,7 +14,7 @@ class LatexNormalizer:
 
         frac_pattern_with_one_brace = r'\\frac\s*{([^{}]*)}\s*([^{}\s])|\\frac\s*([^{}\s])\s*{([^{}]*)}'
         normalized_str = re.sub(frac_pattern_with_one_brace, r'\\frac{\1\3}{\2\4}', normalized_str)
-        
+
         return normalized_str
 
     def normalize_square_root(self):
@@ -23,12 +24,12 @@ class LatexNormalizer:
 
         self.latex_str = normalized_str
         return self.latex_str
-    
+
     def normalize_power(self):
         power_pattern = r'\^([^{}\s])'
 
         normalized_str = re.sub(power_pattern, r'^{\1}', self.latex_str)
-        
+
         return normalized_str
 
     def normalize(self):
@@ -144,14 +145,14 @@ class Expr:
     def __str__(self) -> str:
         temp = self.to_latex()
 
+        if self.is_negative and self.print_minus:
+            temp = f"-{temp}"
+
         if self.has_parens or config.always_parens:
             temp = f"({temp})"
 
         if self.exponent != 1:
             temp = f"{temp}^{{{self.exponent}}}"
-
-        if self.is_negative and self.print_minus:
-            temp = f"-{temp}"
 
         return temp
 
@@ -172,6 +173,11 @@ class Number(Expr):
 
         self.is_negative = value < 0
 
+        if isinstance(value, float):
+            self.is_integer = False
+        elif value != int(value):
+            self.is_integer = False
+
     def traverse_children(self, func) -> None:
         super().traverse_children(func)
 
@@ -179,10 +185,12 @@ class Number(Expr):
         return -self.value if self.is_negative else self.value
 
     def to_latex(self) -> str:
+        value = self.value
         if self.is_integer:
-            return str(self.value)
+            return str(int(value))
         else:
-            return f"{float(self.value):.3f}"
+            value_str = ('{0:.3f}'.format(value)).rstrip('0').rstrip('.')
+            return value_str
 
     def is_like(self, other) -> bool:
         return super().is_like(other)
@@ -207,10 +215,12 @@ class Number(Expr):
         return temp
 
     def __add__(self, other):
-        if isinstance(other, (int, float)):
-            temp = Sum([self, Number(other, type(other) == int)])
-
-            return temp
+        if isinstance(other, Number):
+            result_value = self.get_value() + other.get_value()
+            return Number(result_value)
+        elif isinstance(other, (int, float)):
+            result_value = self.get_value() + other
+            return Number(result_value)
         else:
             return super().__add__(other)
 
@@ -218,14 +228,15 @@ class Number(Expr):
         return self.__add__(other)
 
     def __mul__(self, other):
-        temp = Mul([self, other])
-
-        if isinstance(other, (int, float)):
-            temp = Mul([self, Number(other, type(other) == int)])
-
-            return temp
+        if isinstance(other, Number):
+            result_value = self.get_value() * other.get_value()
+            return Number(result_value)
+        elif isinstance(other, (int, float)):
+            result_value = self.get_value() * other
+            return Number(result_value)
         else:
             return super().__mul__(other)
+
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -260,6 +271,7 @@ class Number(Expr):
             return self
         else:
             raise TypeError("Cannot add this to Number instance")
+
 
 
 # Represents a symbol or variable
@@ -374,12 +386,12 @@ class Mul(Expr):
 
     def sort_children(self) -> None:
         original_indices = list(range(len(self.factors)))
-        
+
         sorted_factors_with_indices = sorted(zip(self.factors, original_indices), key=lambda x: expr_key(x[0]))
         sorted_factors, sorted_indices = zip(*sorted_factors_with_indices)
-        
+
         self.factors = list(sorted_factors)
-        
+
         if len(self.factors) > 1:
             new_is_implicit = [False] * (len(self.factors) - 1)
             for i in range(len(new_is_implicit)):
@@ -605,17 +617,16 @@ class Fraction(Expr):
         return fr"\frac{{{self.num}}}{{{self.denom}}}"
 
     def create_copy(self, is_full_copy: bool):
-        temp = Fraction()
+        temp = Fraction(Number(1), Number(1))
 
         Expr.copy_from_to(self, temp)
 
         if is_full_copy:
-            temp.num = self.num.create_copy()
-            temp.denom = self.denom.create_copy()
-
+            temp.num = self.num.create_copy(is_full_copy)
+            temp.denom = self.denom.create_copy(is_full_copy)
 
         return temp
-    
+
     def is_numerical(self):
         # Checks if both numerator and denominator are numbers
         return isinstance(self.num, Number) and isinstance(self.denom, Number)
@@ -626,7 +637,7 @@ class Fraction(Expr):
             return self.num == other.num and self.denom == other.denom
 
         return False
-    
+
     def __len__(self):
         return len(self.get_children())
 
@@ -650,7 +661,7 @@ class Root(Expr):
         return fr"\sqrt{{{self.base}}}"
 
     def create_copy(self, is_full_copy: bool):
-        temp = Root(self.base.create_copy())
+        temp = Root(self.base.create_copy(is_full_copy))
 
         Expr.copy_from_to(self, temp)
 
@@ -662,7 +673,7 @@ class Root(Expr):
                 return self.base == other.base
 
         return False
-    
+
     def __len__(self):
         return len(self.get_children())
 

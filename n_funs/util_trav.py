@@ -5,7 +5,10 @@ def trav_flatten_exprs(root: Expr):
     """If there are any sums or products with a single term/factor,
     just change the expression to that term/factor.
     """
-    root.traverse_children(trav_flatten_exprs)
+    try:
+        root.traverse_children(trav_flatten_exprs)
+    except AttributeError:
+        return root
 
 
     if isinstance(root, Mul):
@@ -20,7 +23,10 @@ def trav_flatten_exprs(root: Expr):
 
 
 def trav_remove_identity(root: Expr):
-    root.traverse_children(trav_remove_identity)
+    try:
+        root.traverse_children(trav_remove_identity)
+    except AttributeError:
+        return
 
     if isinstance(root, Fraction):
         if root.num == root.denom:

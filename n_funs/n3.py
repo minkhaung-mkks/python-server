@@ -90,6 +90,7 @@ def trav_n3_rule2(root: Expr):
     return root
 
 
+
 def trav_frac_to_dec(root: Expr):
     """Evaluates fractions. Results in Number objects.
     """
@@ -106,6 +107,7 @@ def trav_frac_to_dec(root: Expr):
 
     return root
 
+
 def switch_num_to_dec(root: Expr):
     """Formats Number objects to three decimal places.
     """
@@ -121,16 +123,17 @@ def switch_num_to_dec(root: Expr):
     return root
 
 
+
 def N3(input_str):
     ast_root = N2(input_str)
 
     ast_root = switch_num_to_dec(ast_root)
+    
+    ast_root = trav_frac_to_dec(ast_root)
 
     ast_root = trav_distribute_exp_fraction(ast_root)
 
     ast_root = trav_n3_rule2(ast_root)
-
-    ast_root = trav_frac_to_dec(ast_root)
 
     ast_root = cleanup_traversals(ast_root)
 

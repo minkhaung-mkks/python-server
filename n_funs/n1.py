@@ -87,16 +87,32 @@ def answers_to_polynomial(answers):
 
 
 def trav_remove_implicit_mult(root: Expr):
-    """Remove implicit multiplication by setting all the flags indicating
-    whether it is implicit to False.
+    """Remove implicit multiplication by setting specific flags indicating
+    whether it is implicit to False or True based on the presence of numerical fractions.
     """
     root.traverse_children(trav_remove_implicit_mult)
 
-    # For each term, set all implicit mul flags to False
     if isinstance(root, Mul):
-        root.is_implicit = [False for _ in root.is_implicit]
+        new_is_implicit = []
+
+        for i in range(1, len(root.factors)):
+            prev_factor = root.factors[i - 1]
+            curr_factor = root.factors[i]
+
+            # Check if the current factor is a numerical fraction
+            if isinstance(prev_factor, Number) and isinstance(curr_factor, Fraction) and curr_factor.is_numerical():
+                # If no '*' symbol exists in the expression, set is_implicit to True for this multiplication
+                if "*" not in str(root):  # Check if there is no explicit multiplication sign
+                    new_is_implicit.append(True)  # Implicit addition (treated as addition in LaTeX)
+                else:
+                    new_is_implicit.append(False)  # Explicit multiplication
+            else:
+                new_is_implicit.append(False)
+
+        root.is_implicit = new_is_implicit
 
     return root
+
 
 
 def N1(input_str):

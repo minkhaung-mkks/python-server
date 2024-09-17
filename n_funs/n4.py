@@ -6,10 +6,15 @@ from .n2 import N2
 from .util_trav import cleanup_traversals
 
 
+
 def real_addition(num):
     num_str = str(num)
-    num_str = num_str.replace("+", "+") 
+    num_str = num_str.replace("+", "+")
     return num_str
+
+
+def is_perfect_square(val: float):
+    return np.isclose(np.sqrt(val) % 1, 0.0)
 
 
 def trav_evaluate_square_root(root: Expr):
@@ -39,6 +44,37 @@ def trav_evaluate_square_root(root: Expr):
             root.base.exponent = 1
 
             return root.base
+
+    return root
+
+
+def trav_evaluate_perfect_squares(root: Expr):
+    """For every square root in the expression, evaluate the integer numbers
+    for which the square root is also an integer.
+    """
+    root.traverse_children(trav_evaluate_perfect_squares)
+
+    if isinstance(root, Root):
+        # Find integers that we can evaluate in the expression
+        if isinstance(root.base, Mul):
+            new_mul = Mul()
+            all_nums = root.base.get_factors(lambda x: isinstance(x, Number) and x.exponent == 1 and not x.is_negative)
+
+            while all_nums:
+                num = all_nums.pop()
+
+                if is_perfect_square(num.value):  # Check if it is a perfect square
+                    root.base.remove_factor(num)
+
+                    new_num = Number(np.sqrt(num.value), False)
+                    new_mul.add_factor(-1, new_num)
+
+            new_mul.add_factor(-1, root.create_copy(True))
+
+            return new_mul
+        elif isinstance(root.base, Number):
+            if root.base.exponent == 1 and is_perfect_square(root.base.value):
+                return Number(np.sqrt(root.base.value))
 
     return root
 
@@ -160,20 +196,20 @@ def trav_n4_rule4(root: Expr):
         if len(coeffs) == 0:
             coeffs.append(Number(1))
 
-        combined_value = 1.0 
+        combined_value = 1.0
         for coeff in coeffs:
-            combined_value *= float(coeff.get_value()) 
-        
-        result_coeff = Number(combined_value) 
+            combined_value *= float(coeff.get_value())
 
-        new_mul = Mul([])  
-        new_mul.add_factor(-1, result_coeff)  
+        result_coeff = Number(combined_value)
+
+        new_mul = Mul([])
+        new_mul.add_factor(-1, result_coeff)
 
         var_factors = root.get_factors(lambda x: not isinstance(x, Number))
         var_groups = []
-        
+
         for var_a in var_factors:
-            var_a.exponent = var_a.exponent or Number(1) 
+            var_a.exponent = var_a.exponent or Number(1)
 
             for i, (var_b, exp_sum) in enumerate(var_groups):
                 exp_sum: Sum
@@ -201,19 +237,57 @@ def trav_n4_rule4(root: Expr):
     return root
 
 
+def trav_cleanup_decimals(root: Expr):
+    """Cleans up numbers in the expression by removing unnecessary decimals."""
+    root.traverse_children(trav_cleanup_decimals)
+
+    if hasattr(root, 'exponent'):
+        exp = root.exponent
+        if isinstance(exp, Number):
+            value = exp.get_value()
+            if abs(value - int(round(value))) < 1e-6:
+                exp.value = int(round(value))
+                exp.is_integer = True
+            else:
+                exp.value = round(value, 3)
+                exp.is_integer = False
+            root.exponent = exp
+        elif isinstance(exp, (int, float)):
+            value = exp
+            if abs(value - int(round(value))) < 1e-6:
+                root.exponent = int(round(value))
+            else:
+                root.exponent = round(value, 3)
+        elif isinstance(exp, Expr):
+            root.exponent = trav_cleanup_decimals(exp)
+
+    if isinstance(root, Number):
+        value = root.get_value()
+        if abs(value - int(round(value))) < 1e-6:
+            root.value = int(round(value))
+            root.is_integer = True
+        else:
+            root.value = round(value, 3)
+            root.is_integer = False
+
+    return root
+
+
 
 
 def N4(input_str):
     ast_root = N3(input_str)
-    ast_root = real_addition(ast_root)
-    ast_root = N3(ast_root)
+    # ast_root = real_addition(ast_root)
+    # ast_root = N3(ast_root)
 
+
+    ast_root = trav_evaluate_perfect_squares(ast_root)
     ast_root = trav_evaluate_square_root(ast_root)
     ast_root = trav_sum_similar_terms(ast_root)
     ast_root = trav_n4_rule1(ast_root)
     ast_root = trav_n4_rule4(ast_root)
 
-
+    ast_root = trav_cleanup_decimals(ast_root)
     ast_root = cleanup_traversals(ast_root)
 
     return ast_root
