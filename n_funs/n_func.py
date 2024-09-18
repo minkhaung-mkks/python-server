@@ -17,6 +17,13 @@ def apply_n_func(n, input_str):
     """Applies nfunc to the expression and returns the results as a dictionary."""
     results = {}
     results['input'] = input_str
+    print("-"*38)
+    print(input_str)
+    print("-"*38)
     for i in range(n):
         results[f'N{i + 1}'] = N(i + 1, input_str)
+        print("-"*38)
+        print(i+1)
+        print(results[f'N{i+1}'])
+        print("-"*38)
     return results
