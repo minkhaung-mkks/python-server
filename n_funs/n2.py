@@ -175,6 +175,19 @@ def float_to_fraction(expr: Expr):
         return new_frac
     else:
         return expr
+    
+
+
+def trav_dec_to_frac(root: Expr):
+    """Converts decimal Numbers to Fractions with integer numerator and denominator."""
+    root.traverse_children(trav_dec_to_frac)
+    
+    if isinstance(root, Number):
+        new_frac = float_to_fraction(root)
+        Expr.copy_from_to(root, new_frac)
+        return new_frac
+
+    return root
 
 
 def trav_rewrite_decimal_numbers(root: Expr):
@@ -204,6 +217,8 @@ def N2(input_str):
 
     # Sort any sortable expressions
     ast_root = trav_sort_expressions(ast_root)
+
+    ast_root = trav_dec_to_frac(ast_root)
 
     # Seperate fractions if two numbers have gcd(a, b) = 1
     ast_root = trav_split_fractions(ast_root)
