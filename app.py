@@ -11,6 +11,13 @@ allowed_origins = [
 # Enable CORS for the specified origins
 CORS(app, origins=allowed_origins)
 
+def europenize(input_string):
+    # Remove periods before commas and replace commas with periods
+    return input_string.replace('.', '').replace(',', '.')
+
+def americanize(input_string):
+    # Remove all commas
+    return input_string.replace(',', '')
 
 @app.route('/checkUserAnswer', methods=['POST'])
 def check_user_answer():
@@ -37,9 +44,11 @@ def check_user_answer():
 
         # Generate nAnswers using apply_n_func based on the user's input
         max_nLevel = 4  # max number of available n funcs
+        userAnswerEuFormat = europenize(user_answer)
+        correctAnswerEuFormat = europenize(aiJSON["answer"])
 
-        generated_answers = apply_n_func(max_nLevel, user_answer)
-        nAnswers = apply_n_func(max_nLevel, aiJSON["answer"])
+        generated_answers = apply_n_func(max_nLevel, userAnswerEuFormat)
+        nAnswers = apply_n_func(max_nLevel, correctAnswerEuFormat)
         # Initialize the result dictionary
         result = {"answer": "correct"}
         eq = False
@@ -96,6 +105,68 @@ def check_user_answer():
                         "hint": incorrect['hint'] or ""
                     }
                     break
+
+        if not eq:
+            userAnswerAmericanFormat = americanize(user_answer)
+            correctAnswerAmericanFormat = americanize(aiJSON["answer"])
+            generated_answers = apply_n_func(max_nLevel, userAnswerAmericanFormat)
+            nAnswers = apply_n_func(max_nLevel, correctAnswerAmericanFormat)
+            # Initialize the result dictionary
+            result = {"answer": "correct"}
+            eq = False
+            print(eq)
+            print(generated_answers)
+            print(nAnswers)
+
+            # Compare each level's answer
+            for i in range(1, max_nLevel + 1):
+                key = f'N{i}'
+                print(nAnswers.get(key))
+                print(generated_answers.get(key))
+                if nAnswers.get(key) == generated_answers.get(key):
+                    result[key] = "correct"
+                    print("---------")
+                    eq = True
+                else:
+                    result[key] = "incorrect"
+                    if i == expected_n:
+                        result["nStatus"] = "failed"
+            sa = {
+                "steps": aiJSON['correctSteps'],
+                "value": user_answer,
+                "mistakeStep": 0,
+                "nStatus": {"n": expected_n, "status": result.get("nStatus", "correct")},
+                "hint": ""
+            }
+            print(sa["hint"])
+
+            if not eq:
+                print('--------------')
+                result['answer'] = "incorrect"
+                for incorrect in incorrectAnswers:
+                    print(incorrect['hint'])
+                    if 'value' not in incorrect or 'steps' not in incorrect or 'mistakeStep' not in incorrect:
+                        continue  # Skip this incorrect answer if required fields are missing
+                    result["ia"] ="correct"
+                    nIa = apply_n_func(max_nLevel, incorrect['value'])
+                    for i in range(1, max_nLevel + 1):
+                        key = f'N{i}'
+                        if nIa.get(key) == generated_answers.get(key):
+                            result[key] = "correct"
+                            eq = True
+                        else:
+                            result[key] = "incorrect"
+                            if i == expected_n:
+                                result["ia"] = "failed"
+                    if eq:
+                        sa = {
+                            "value": incorrect['value'],
+                            "steps": incorrect['steps'],
+                            "nStatus": {"n": expected_n, "status": result["ia"]},
+                            "mistakeStep": incorrect['mistakeStep'],
+                            "hint": incorrect['hint'] or ""
+                        }
+                        break
 
         if not eq:
             sa = {
