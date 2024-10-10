@@ -202,6 +202,7 @@ def check_user_answer():
             "mistakeStep": sa["mistakeStep"],
             "userAnswer": user_answer,
             "multiStep": sa['multiStep'],
+            "stepCount": len(sa['steps']),
             "hint": sa['hint']
         }
         print(returnData)
@@ -225,7 +226,8 @@ def check_user_answer():
             "mistakeStep": 0,
             "userAnswer": user_answer,
               "multiStep":False,
-            "hint":""
+            "hint":"",
+            "stepCount": 0,
         }
         
         return jsonify(dread), 200
@@ -246,7 +248,8 @@ def check_user_answer():
             "mistakeStep": 0,
             "userAnswer": user_answer,
               "multiStep":False,
-            "hint":""
+            "hint":"",
+            "stepCount": 0,
         }
         
         return jsonify(dread), 200
@@ -267,7 +270,8 @@ def check_user_answer():
             "mistakeStep": 0,
             "userAnswer": user_answer,
               "multiStep":False,
-            "hint":""
+            "hint":"",
+            "stepCount": 0,
         }
         
         return jsonify(dread), 200
