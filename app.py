@@ -74,6 +74,7 @@ def check_user_answer():
             "value": user_answer,
             "mistakeStep": 0,
             "nStatus": {"n": expected_n, "status": result.get("nStatus", "correct")},
+            "multiStep":True if len( aiJSON['correctSteps']) > 1 else False,
             "hint": ""
         }
         print(sa["hint"])
@@ -102,7 +103,8 @@ def check_user_answer():
                         "steps": incorrect['steps'],
                         "nStatus": {"n": expected_n, "status": result["ia"]},
                         "mistakeStep": incorrect['mistakeStep'],
-                        "hint": incorrect['hint'] or ""
+                        "hint": incorrect['hint'] or "",
+                        "multiStep":True if len( incorrect['steps']) > 1 else False,
                     }
                     break
 
@@ -136,7 +138,8 @@ def check_user_answer():
                 "value": user_answer,
                 "mistakeStep": 0,
                 "nStatus": {"n": expected_n, "status": result.get("nStatus", "correct")},
-                "hint": ""
+                "hint": "",
+                "multiStep":True if len( aiJSON['correctSteps']) > 1 else False,
             }
             print(sa["hint"])
 
@@ -164,7 +167,8 @@ def check_user_answer():
                             "steps": incorrect['steps'],
                             "nStatus": {"n": expected_n, "status": result["ia"]},
                             "mistakeStep": incorrect['mistakeStep'],
-                            "hint": incorrect['hint'] or ""
+                            "hint": incorrect['hint'] or "",
+                            "multiStep":True if len( incorrect['steps']) > 1 else False,
                         }
                         break
 
@@ -174,6 +178,7 @@ def check_user_answer():
                 "steps": [{"step": 'none', "explanation": 'none'}],
                 "nStatus": {"status": 'failed', "n": 0},
                 "mistakeStep": 0,
+                "multiStep":False,
                 "hint":""
             }
         # print(result)
@@ -196,6 +201,7 @@ def check_user_answer():
             "selectedAnswerSteps": sa["steps"],
             "mistakeStep": sa["mistakeStep"],
             "userAnswer": user_answer,
+            "multiStep": sa['multiStep'],
             "hint": sa['hint']
         }
         print(returnData)
@@ -218,6 +224,7 @@ def check_user_answer():
             "selectedAnswerSteps": [{"step": 'none', "explanation": 'none'}],
             "mistakeStep": 0,
             "userAnswer": user_answer,
+              "multiStep":False,
             "hint":""
         }
         
@@ -238,6 +245,7 @@ def check_user_answer():
             "selectedAnswerSteps": [{"step": 'none', "explanation": 'none'}],
             "mistakeStep": 0,
             "userAnswer": user_answer,
+              "multiStep":False,
             "hint":""
         }
         
@@ -258,6 +266,7 @@ def check_user_answer():
             "selectedAnswerSteps": [{"step": 'none', "explanation": 'none'}],
             "mistakeStep": 0,
             "userAnswer": user_answer,
+              "multiStep":False,
             "hint":""
         }
         
