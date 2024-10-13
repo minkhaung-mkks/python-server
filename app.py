@@ -195,6 +195,7 @@ def check_user_answer():
         returnData = {
             "status": result["answer"],
             "nStatus": sa["nStatus"],
+            "isShowButton": False if result["answer"] == "correct" and sa['nStatus']['status'] == "failed" else True,
             "correctAnswer": aiJSON['answer'],
             "correctSteps": aiJSON['correctSteps'],
             "selectedAnswer": sa["value"],
@@ -215,6 +216,7 @@ def check_user_answer():
         dread = {
                 
             "status": "incorrect",
+            "isShowButton":True,
             "nStatus": {
                     "status":"failed",
                     "n" : expected_n
@@ -230,7 +232,7 @@ def check_user_answer():
             "stepCount": 0,
         }
         
-        return jsonify(dread), 200
+        return jsonify(dread), 500
     except TypeError as e:
         print("T-EXpection")
         print(e)
@@ -241,6 +243,7 @@ def check_user_answer():
                     "status":"failed",
                     "n" : expected_n
                 },
+             "isShowButton":True,
             "correctAnswer": aiJSON['answer'],
             "correctSteps": aiJSON['correctSteps'],
             "selectedAnswer": "n/a",
@@ -252,12 +255,13 @@ def check_user_answer():
             "stepCount": 0,
         }
         
-        return jsonify(dread), 200
+        return jsonify(dread), 500
     except Exception as e:
         print("EXpection")
         print(e)
+        
         dread = {
-                
+                 "isShowButton":True,
             "status": "incorrect",
             "nStatus": {
                     "status":"failed",
@@ -274,7 +278,7 @@ def check_user_answer():
             "stepCount": 0,
         }
         
-        return jsonify(dread), 200
+        return jsonify(dread), 500
 
 if __name__ == '__main__':
 	  app.run(host='0.0.0.0', port=8000)
