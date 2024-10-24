@@ -195,7 +195,7 @@ def check_user_answer():
         returnData = {
             "status": result["answer"],
             "nStatus": sa["nStatus"],
-            "isShowButton": False if result["answer"] == "correct" and sa['nStatus']['status'] == "failed" else True,
+            "isShowButton": False if result["answer"] == "correct" and sa['nStatus']['status'] == "failed" or len(sa['steps']) <= 2 else True,
             "correctAnswer": aiJSON['answer'],
             "correctSteps": aiJSON['correctSteps'],
             "selectedAnswer": sa["value"],
