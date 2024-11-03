@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from n_funs.n_func import apply_n_func
 from flask_cors import CORS
+import re
 
 app = Flask(__name__)
 allowed_origins = [
@@ -12,8 +13,9 @@ allowed_origins = [
 CORS(app, origins=allowed_origins)
 
 def europenize(input_string):
-    # Remove periods before commas and replace commas with periods
-    return input_string.replace('.', '').replace(',', '.')
+    # Replace periods that are directly before commas, and then replace commas with periods
+    input_string = re.sub(r'\.(?=,)', '', input_string)
+    return input_string.replace(',', '.')
 
 def americanize(input_string):
     # Remove all commas
@@ -276,6 +278,65 @@ def check_user_answer():
               "multiStep":False,
             "hint":"",
             "stepCount": 0,
+        }
+        
+        return jsonify(dread), 500
+    
+@app.route('/checkUserAnswerDebug', methods=['POST'])
+def check_user_answer_debug():
+    try:
+        data = request.json
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        # Validate the expected keys in the JSON payload
+        user_answer = data['userAnswer']
+        euNFunctions = []
+        amercianFunctions = []
+        max_nLevel = 4  # max number of available n funcs
+        userAnswerEuFormat = europenize(user_answer)
+
+        generated_answers = apply_n_func(max_nLevel, userAnswerEuFormat)
+       
+        euNFunctions = generated_answers
+        userAnswerAmericanFormat = americanize(user_answer)
+        correctAnswerAmericanFormat = americanize(aiJSON["answer"])
+        generated_answers = apply_n_func(max_nLevel, userAnswerAmericanFormat)
+        amercianFunctions = generated_answers
+        print(sa["hint"])
+        returnData = {
+            "amercianFunctions":amercianFunctions,
+            "euNFunctions":euNFunctions,
+        }
+        print(returnData)
+
+        return jsonify(returnData), 200
+
+    except KeyError as e:
+        print("Key - EXpection")
+        print(e)
+        dread = {
+            "amercianFunctions":amercianFunctions,
+            "euNFunctions":euNFunctions,
+        }
+        
+        return jsonify(dread), 500
+    except TypeError as e:
+        print("T-EXpection")
+        print(e)
+        dread = {
+            "amercianFunctions":amercianFunctions,
+            "euNFunctions":euNFunctions,
+        }
+        
+        return jsonify(dread), 500
+    except Exception as e:
+        print("EXpection")
+        print(e)
+        
+        dread = {
+            "amercianFunctions":amercianFunctions,
+            "euNFunctions":euNFunctions,
         }
         
         return jsonify(dread), 500
