@@ -13,9 +13,9 @@ allowed_origins = [
 CORS(app, origins=allowed_origins)
 
 def europenize(input_string):
-    # Replace periods that are directly before commas, and then replace commas with periods
-    input_string = re.sub(r'\.(?=,)', '', input_string)
-    return input_string.replace(',', '.')
+    # Remove periods before commas and replace commas with periods
+    return input_string.replace('.', '').replace(',', '.')
+
 
 def americanize(input_string):
     # Remove all commas
