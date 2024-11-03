@@ -300,10 +300,8 @@ def check_user_answer_debug():
        
         euNFunctions = generated_answers
         userAnswerAmericanFormat = americanize(user_answer)
-        correctAnswerAmericanFormat = americanize(aiJSON["answer"])
-        generated_answers = apply_n_func(max_nLevel, userAnswerAmericanFormat)
-        amercianFunctions = generated_answers
-        print(sa["hint"])
+        generated_answers_au = apply_n_func(max_nLevel, userAnswerAmericanFormat)
+        amercianFunctions = generated_answers_au
         returnData = {
             "amercianFunctions":amercianFunctions,
             "euNFunctions":euNFunctions,
