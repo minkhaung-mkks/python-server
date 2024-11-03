@@ -320,7 +320,7 @@ def check_user_answer_debug():
             "euNFunctions":euNFunctions,
         }
         
-        return jsonify(dread), 500
+        return jsonify(dread), 200
     except TypeError as e:
         print("T-EXpection")
         print(e)
@@ -329,7 +329,7 @@ def check_user_answer_debug():
             "euNFunctions":euNFunctions,
         }
         
-        return jsonify(dread), 500
+        return jsonify(dread), 200
     except Exception as e:
         print("EXpection")
         print(e)
@@ -339,7 +339,7 @@ def check_user_answer_debug():
             "euNFunctions":euNFunctions,
         }
         
-        return jsonify(dread), 500
+        return jsonify(dread), 200
 
 if __name__ == '__main__':
 	  app.run(host='0.0.0.0', port=8000)
