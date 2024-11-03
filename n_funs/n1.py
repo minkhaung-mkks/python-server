@@ -6,17 +6,72 @@ from .data_types import LatexNormalizer
 from .util_trav import cleanup_traversals
 
 
+
+def normalize_numbers_in_string(s):
+    def normalize_number(num_str):
+        if ',' in num_str and '.' in num_str:
+            if num_str.find(',') < num_str.find('.'):  # US notation
+                num_str = num_str.replace(',', '')
+            else:  # European notation
+                num_str = num_str.replace('.', '').replace(',', '.')
+        elif ',' in num_str and num_str.count(',') > 1:  # Multiple commas imply grouping
+            num_str = num_str.replace(',', '')
+        elif '.' in num_str and num_str.count('.') > 1:  # Multiple dots imply grouping
+            num_str = num_str.replace('.', '')
+        elif ',' in num_str:  # Commas without dots
+            num_str = num_str.replace(',', '.')
+        # If only dots are present, keep as is
+        return num_str
+
+    # Regular expression to find numbers in the string
+    number_pattern = r'\b\d[\d.,]*\b'
+
+    # Function to replace each number using normalize_number
+    def replace_number(match):
+        num_str = match.group(0)
+        norm_num = normalize_number(num_str)
+        return norm_num
+
+    # Apply the normalization to all numbers in the string
+    s = re.sub(number_pattern, replace_number, s)
+    return s
+
 def clean_string(latex_str):
     # Remove whitespace and trailing periods
     temp = latex_str.rstrip('. ')
     temp = temp.lstrip()
     temp = temp.lower()
 
-    # Replace multiplication symbols with asterix
+    temp = normalize_numbers_in_string(temp)
+
+    # Replace multiplication symbols with asterisks
     temp = re.sub(r"\\times|\\cdot", '*', temp)
 
     normalizer = LatexNormalizer(temp)
     temp = normalizer.normalize()
+
+    # Function to check if a string represents a number
+    def is_numeric(s):
+        return re.fullmatch(r'\d+(\.\d+)?', s) is not None
+
+    # Pattern to match a digit followed by \frac{numerator}{denominator}
+    pattern = r'(\d)\s*\\frac\s*{\s*([^}]*)\s*}\s*{\s*([^}]*)\s*}'
+
+    # Function to determine whether to insert '+' or '*'
+    def replace_mixed_number(match):
+        integer_part = match.group(1)
+        numerator = match.group(2)
+        denominator = match.group(3)
+
+        if is_numeric(numerator) and is_numeric(denominator):
+            # Both numerator and denominator are numeric, insert '+'
+            return f'{integer_part}+\\frac{{{numerator}}}{{{denominator}}}'
+        else:
+            # Either numerator or denominator is not numeric, keep as multiplication
+            return f'{integer_part}*\\frac{{{numerator}}}{{{denominator}}}'
+
+    # Apply the substitution
+    temp = re.sub(pattern, replace_mixed_number, temp)
 
     return temp
 

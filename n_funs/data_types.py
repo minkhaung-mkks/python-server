@@ -189,7 +189,7 @@ class Number(Expr):
         if self.is_integer:
             return str(int(value))
         else:
-            value_str = ('{0:.3f}'.format(value)).rstrip('0').rstrip('.')
+            value_str = ('{0:.9f}'.format(value)).rstrip('0').rstrip('.')
             return value_str
 
     def is_like(self, other) -> bool:
