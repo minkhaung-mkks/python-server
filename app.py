@@ -9,7 +9,7 @@ allowed_origins = [
     "http://localhost:5173",
 ]
 
-# Enable CORS for the specified origins
+# Enable CORS for the specified originsa asdasd
 CORS(app, origins=allowed_origins)
 
 def europenize(input_string):
