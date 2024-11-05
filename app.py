@@ -14,12 +14,14 @@ CORS(app, origins=allowed_origins)
 
 def europenize(input_string):
     # Remove periods before commas and replace commas with periods
-    return input_string.replace('.', '').replace(',', '.')
+    # return input_string.replace('.', '').replace(',', '.')
+    return input_string
 
 
 def americanize(input_string):
     # Remove all commas
-    return input_string.replace(',', '')
+    # return input_string.replace(',', '')
+    return input_string
 
 @app.route('/checkUserAnswer', methods=['POST'])
 def check_user_answer():
