@@ -186,13 +186,18 @@ def currency_vals(input_str):
 
 def N1(input_str):
     input_str = currency_vals(input_str)
-    ast_root = convert_expression_to_AST(input_str)
+    if '=' in input_str:
+        rhs_str = input_str.split('=')[-1]
+        rhs_ast = convert_expression_to_AST(rhs_str)
+        input_str = rhs_ast
+    else:
+        input_str = convert_expression_to_AST(input_str)
+    
+    ast_root = input_str
 
-    # Transform multiple answers seperated by \vee into a single polynomial
     if not isinstance(ast_root, Expr):
         ast_root = answers_to_polynomial(ast_root)
 
-    # Remove implicit multiplication
     ast_root = trav_remove_implicit_mult(ast_root)
 
     ast_root = cleanup_traversals(ast_root)
