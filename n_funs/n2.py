@@ -212,8 +212,23 @@ def trav_N2_rule5(root: Expr):
     return root
 
 
+def trav_fix_decimal_numbers(root: Expr):
+    """Traverse the expression tree and convert numbers like 2.0 to integers."""
+    root.traverse_children(trav_fix_decimal_numbers)
+    
+    if isinstance(root, Number):
+        if isinstance(root.value, float):
+            # Check if the value is an integer (i.e., decimal part is zero)
+            if root.value.is_integer():
+                root.value = int(root.value)
+                root.is_integer = True
+    return root
+
+
 def N2(input_str):
     ast_root = N1(input_str)
+
+    ast_root = trav_fix_decimal_numbers(ast_root)
 
     # Sort any sortable expressions
     ast_root = trav_sort_expressions(ast_root)

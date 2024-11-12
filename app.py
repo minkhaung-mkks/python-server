@@ -209,7 +209,7 @@ def check_user_answer():
             "multiStep": sa['multiStep'],
             "stepCount": len(sa['steps']),
             "hint": sa['hint'],
-            "versionCounter":1
+            "versionCounter":1.1
         }
         print(returnData)
 
@@ -235,7 +235,7 @@ def check_user_answer():
               "multiStep":False,
             "hint":"",
             "stepCount": 0,
-            "versionCounter":1
+            "versionCounter":1.1
         }
         
         return jsonify(dread), 500
@@ -259,7 +259,7 @@ def check_user_answer():
               "multiStep":False,
             "hint":"",
             "stepCount": 0,
-            "versionCounter":1
+            "versionCounter":1.1
         }
         
         return jsonify(dread), 500
@@ -283,7 +283,7 @@ def check_user_answer():
               "multiStep":False,
             "hint":"",
             "stepCount": 0,
-            "versionCounter":1
+            "versionCounter":1.1
         }
         
         return jsonify(dread), 500

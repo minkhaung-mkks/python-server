@@ -171,7 +171,21 @@ def trav_remove_implicit_mult(root: Expr):
 
 
 
+def currency_vals(input_str):
+    def replace_currency(match):
+        num_str = match.group(0)
+        num_str = num_str[:-2] + '.00'
+        return num_str
+    
+    pattern = r'\b\d+(?:[.,]\d+)?[.,]-'
+
+    output_str = re.sub(pattern, replace_currency, input_str)
+
+    return output_str
+
+
 def N1(input_str):
+    input_str = currency_vals(input_str)
     ast_root = convert_expression_to_AST(input_str)
 
     # Transform multiple answers seperated by \vee into a single polynomial
