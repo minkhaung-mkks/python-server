@@ -62,24 +62,26 @@ def check_user_answer():
         
         expected_n = int(aiJSON['n'])
         incorrectAnswers = aiJSON['ia']
-        n1_check_result = check_incorrect_answers_n1(user_answer, incorrectAnswers)
-        if n1_check_result:
-            returnData = {
-                "status": n1_check_result["status"],
-                "nStatus": n1_check_result["nStatus"],
-                "isShowButton": False,
-                "correctAnswer": aiJSON['answer'],
-                "correctSteps": aiJSON['correctSteps'],
-                "selectedAnswer": n1_check_result["value"],
-                "selectedAnswerSteps": n1_check_result["steps"],
-                "mistakeStep": n1_check_result["mistakeStep"],
-                "userAnswer": user_answer,
-                "multiStep": n1_check_result["multiStep"],
-                "stepCount": len(n1_check_result["steps"]),
-                "hint": n1_check_result["hint"],
-                "versionCounter": 1.2,
-            }
-            return jsonify(returnData), 200
+        if(expected_n == 1):
+            n1_check_result = check_incorrect_answers_n1(user_answer, incorrectAnswers)
+            if n1_check_result:
+                returnData = {
+                    "status": n1_check_result["status"],
+                    "nStatus": n1_check_result["nStatus"],
+                    "isShowButton": False,
+                    "correctAnswer": aiJSON['answer'],
+                    "correctSteps": aiJSON['correctSteps'],
+                    "selectedAnswer": n1_check_result["value"],
+                    "selectedAnswerSteps": n1_check_result["steps"],
+                    "mistakeStep": n1_check_result["mistakeStep"],
+                    "userAnswer": user_answer,
+                    "multiStep": n1_check_result["multiStep"],
+                    "stepCount": len(n1_check_result["steps"]),
+                    "hint": n1_check_result["hint"],
+                    "versionCounter": 1.2,
+                }
+                return jsonify(returnData), 200
+        
 
         if not isinstance(expected_n, int) or not isinstance(incorrectAnswers, list):
             return jsonify({"error": "'n' should be an integer and 'ia' should be a list"}), 400
