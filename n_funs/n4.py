@@ -277,8 +277,8 @@ def trav_cleanup_decimals(root: Expr):
 
 def N4(input_str):
     ast_root = N3(input_str)
-    # ast_root = real_addition(ast_root)
-    # ast_root = N3(ast_root)
+    ast_root = real_addition(ast_root)
+    ast_root = N3(ast_root)
 
 
     ast_root = trav_evaluate_perfect_squares(ast_root)
