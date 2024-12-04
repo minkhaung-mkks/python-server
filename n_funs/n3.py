@@ -98,6 +98,11 @@ def trav_frac_to_dec(root: Expr):
 
     if isinstance(root, Fraction):
         if isinstance(root.num, Number) and isinstance(root.denom, Number):
+            denom_value = root.denom.get_value()
+            if denom_value == 0:
+                # Return the fraction itself if denominator is zero
+                return root
+            
             evaluation = root.num.get_value() / root.denom.get_value()
 
             new_num = Number(evaluation, False)
