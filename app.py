@@ -68,7 +68,7 @@ def check_user_answer():
                 returnData = {
                     "status": n1_check_result["status"],
                     "nStatus": n1_check_result["nStatus"],
-                    "isShowButton": False,
+                     "isShowButton": False if len(aiJSON['correctSteps']) <= 2 else True,
                     "correctAnswer": aiJSON['answer'],
                     "correctSteps": aiJSON['correctSteps'],
                     "selectedAnswer": n1_check_result["value"],
