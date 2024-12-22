@@ -87,6 +87,12 @@ def p_atom(p):
         p[0].has_parens = True
 
 
+def p_atom_colon_fraction(p):
+    """atom : num COLON num"""
+    # Now "2.0:8.0" can appear anywhere an `atom` can appear
+    p[0] = Fraction(p[1], p[3])
+
+
 # Exponents
 def p_expo(p):
     """expo : atom HAT LBRACKET expr RBRACKET
@@ -219,6 +225,12 @@ def p_sqrt(p):
 def p_factorial(p):
     """factorial : atom FACT"""
     p[0] = Factorial(p[1])
+
+
+# Colons
+def p_expr_colon_fraction(p):
+    """expr : num COLON num"""
+    p[0] = Fraction(p[1], p[3])
 
 
 # Error message

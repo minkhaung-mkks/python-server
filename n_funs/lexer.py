@@ -18,7 +18,8 @@ tokens = [
     'HAT',
     'SYMBOL',
     'VEE',
-    'EQUALS'
+    'EQUALS',  
+    'COLON',   
 ]
 
 # Regular expression rules for simple tokens
@@ -35,12 +36,12 @@ t_EQUALS  = r'\='
 # Latex symbols
 t_LBRACKET = r"{"
 t_RBRACKET = r"}"
+t_COLON = r":"
 
 # Matches decimal point numbers
 def t_FLOAT(t):
     r'\d+[\,\.]\d+'
     t.value = t.value.replace(',', '.')
-
     t.value = float(t.value)
     return t
 
