@@ -86,10 +86,9 @@ def p_atom(p):
         p[0] = p[2]
         p[0].has_parens = True
 
-
+# Colon Conversion to Fraction
 def p_atom_colon_fraction(p):
     """atom : num COLON num"""
-    # Now "2.0:8.0" can appear anywhere an `atom` can appear
     p[0] = Fraction(p[1], p[3])
 
 
@@ -227,7 +226,7 @@ def p_factorial(p):
     p[0] = Factorial(p[1])
 
 
-# Colons
+# Colons 
 def p_expr_colon_fraction(p):
     """expr : num COLON num"""
     p[0] = Fraction(p[1], p[3])
